@@ -1,7 +1,7 @@
-# Bank-WebSite
+# ITStep-Bank-WebSite
 StepIT graduate work
 
-<img src="https://github.com/anigilyatornayapushka/Bank-WebSite/raw/main/tools/stepitlogo.png">
+<img src="https://github.com/anigilyatornayapushka/ITStep-Bank-WebSite/raw/main/tools/stepitlogo.png">
 
 ## Functionality
 
@@ -36,3 +36,7 @@ To use this project, you will need the following:
 Make sure to install the necessary libraries, set up Redis, and configure PostgreSQL according to the provided links before running the project.
 
 Feel free to customize this section with any additional instructions or information that may be relevant to your project.
+
+## License
+
+This project is licensed under the MIT License. You can find the full text of the license [here](LICENSE).
