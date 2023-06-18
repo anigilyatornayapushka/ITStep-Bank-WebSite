@@ -1,0 +1,14 @@
+# Env
+env
+.env
+
+# Celery
+celerybeat-schedule.bak
+celerybeat-schedule.dat
+celerybeat-schedule.dir
+
+# Db
+testdb
+
+# Pycache
+__pycache__/
