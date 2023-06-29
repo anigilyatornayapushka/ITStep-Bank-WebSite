@@ -9,15 +9,15 @@ from django.contrib.auth.base_user import (
 from django.core.validators import MinLengthValidator
 from django.utils import timezone
 
+# Python
+import datetime
+import typing as t
+
 # Third-party
 from abstracts.models import (
     AbstractModel,
     AbstractManager,
 )
-
-# Python
-import datetime
-import typing as t
 
 
 class UserManager(BaseUserManager, AbstractManager):
@@ -168,13 +168,14 @@ class CodeManager(models.Manager):
                         **kwargs: dict) -> QuerySet['AccountCode']:
         # Filter, that allows to check if code lifetime has expired
         now: datetime.datetime = timezone.now()
+
         queryset: QuerySet['AccountCode'] = self.filter(**kwargs)
 
         # If check date expire is True
         if expired is True:
             queryset = queryset.filter(datetime_expire__lt=now)
 
-        # If it doesn't matter
+        # Otherwise
         else:
             queryset = queryset.filter(datetime_expire__gt=now)
 
@@ -187,7 +188,7 @@ class AccountCode(models.Model):
     """
 
     # Length of activation code
-    CODE_LENGTH: int = 50
+    CODE_LENGTH: int = 6
     # Code lifetime. Will be removed from the database over time
     LIFETIME: datetime.timedelta = datetime.timedelta(minutes=10)
     # Activation-account code
@@ -241,20 +242,14 @@ class RefreshTokenManager(AbstractManager):
         """
         Find all valid tokens.
         """
+        # Check if token is not expired
+        queryset: QuerySet['TokenWhiteList'] =\
+            TokenWhiteList.objects.filter(expire_datetime__gt=timezone.now())
+
         # If there is need to find active refresh token for user
         if user:
-            queryset: QuerySet['TokenWhiteList'] = \
-                TokenWhiteList.objects.filter(user=user, refresh_token=token,
-                                              fingerprint=fingerprint, ip=ip)
-
-        # Get all active refresh tokens
-        else:
-            queryset: QuerySet['TokenWhiteList'] = \
-                TokenWhiteList.objects.filter(refresh_token=token,
-                                              fingerprint=fingerprint, ip=ip)
-
-        # Check if token is not expired
-        queryset = queryset.filter(expire_datetime__gt=timezone.now())
+            queryset = queryset.filter(user=user, refresh_token=token,
+                                       fingerprint=fingerprint, ip=ip)
 
         return queryset
 

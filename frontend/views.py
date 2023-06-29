@@ -1,18 +1,8 @@
 # Django
 from django import views
-from django.shortcuts import render
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
-
-# Local
-from .forms import (
-    RegistrationForm,
-    LoginForm,
-    ActivateAccountForm,
-    SendPasswordCodeForm,
-    ChangePasswordForm,
-    ForgetPasswordForm,
-)
+from django.shortcuts import render
 
 # Python
 import typing as t
@@ -23,92 +13,115 @@ class DefaultFrontendView(views.View):
     Default view that implements base logic of views.
     """
 
-    _form: t.Any = ''
-    _context: dict = {}
+    template: str = 'base.html'
 
     def get(self, request: HttpRequest, *args: t.Any, **kwargs: t.Any
             ) -> HttpResponse:
         """
         GET method.
         """
-        if self._form:
-            context: dict = {
-                'ctx_form': self._form
-            }
-        else:
-            context: dict = self._context
-
-        return render(request=request, template_name=self._template,
-                      context=context)
+        return render(request=request, template_name=self.template)
 
 
-class BaseView(DefaultFrontendView):
+class HomePageView(DefaultFrontendView):
     """
-    Empty page with navigation bar.
+    Home page.
     """
 
-    _template: str = 'base.html'
+    template: str = 'homepage.html'
 
 
 class RegistrationView(DefaultFrontendView):
     """
-    View for user to registrate.
+    Registration.
     """
 
-    _form: RegistrationForm = RegistrationForm
-    _template: str = 'reg.html'
+    template: str = 'reg.html'
 
 
-class LoginView(DefaultFrontendView):
+class AccountActivationBaseView(DefaultFrontendView):
     """
-    View for user to log in.
+    Activate user account.
     """
 
-    _form: LoginForm = LoginForm
-    _template: str = 'login.html'
+    template: str = 'base-account-activation.html'
 
 
 class AccountActivationView(DefaultFrontendView):
     """
-    View for user to activate account.
+    Activate user account.
     """
 
-    _form: ActivateAccountForm = ActivateAccountForm
-    _template: str = 'account-activate.html'
+    template: str = 'account-activation.html'
 
 
-class ForgetPasswordView(DefaultFrontendView):
+class LoginView(DefaultFrontendView):
     """
-    View for user to restore password.
-    """
-
-    _context: dict = {
-        'ctx_form1': SendPasswordCodeForm,
-        'ctx_form2': ForgetPasswordForm
-    }
-    _template: str = 'restore-password.html'
-
-
-class LogoutView(DefaultFrontendView):
-    """
-    View for user to log out.
+    Login user in system.
     """
 
-    _template: str = 'logout.html'
+    template: str = 'login.html'
 
 
-class ChangePasswordView(DefaultFrontendView):
+class InformationView(DefaultFrontendView):
     """
-    View for user to change password.
-    """
-
-    _form: ChangePasswordForm = ChangePasswordForm
-    _template: str = 'changepassword/change-password.html'
-
-
-class BankView(DefaultFrontendView):
-    """
-    View for user to use bank application.
+    Privacy policy and Terms of use.
     """
 
-    _template: str = 'bank/bank.html'
+    template: str = 'information.html'
+
+
+class ForgotPasswordView(DefaultFrontendView):
+    """
+    Password recovery.
+    """
+
+    template: str = 'forgot-password.html'
+
+
+class ProfileView(DefaultFrontendView):
+    """
+    Profile of user.
+    """
+
+    template: str = 'profile.html'
+
+
+class ReplenishBalanceView(DefaultFrontendView):
+    """
+    Replenish virtual card balance.
+    """
+
+    template: str = 'balance-replenishment.html'
+
+
+class NewPasswordView(DefaultFrontendView):
+    """
+    Change user password.
+    """
+
+    template: str = 'new-password.html'
+
+
+class TransactionView(DefaultFrontendView):
+    """
+    Do transaction and check all transactions done.
+    """
+
+    template: str = 'transaction.html'
+
+
+class WithdrawMoneyView(DefaultFrontendView):
+    """
+    Withdraw money.
+    """
+
+    template: str = 'withdraw.html'
+
+
+class CurrencyConvertationView(DefaultFrontendView):
+    """
+    Convert currency.
+    """
+
+    template: str = 'currency-convertation.html'

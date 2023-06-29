@@ -8,7 +8,7 @@ from .views import (
     GetTokenView,
     ActivateAccountView,
     ChangePasswordView,
-    ForgetPasswordView,
+    ForgotPasswordView,
     NewPasswordConfirmView,
     LogoutView,
     UserView,
@@ -26,24 +26,24 @@ urlpatterns = [
     # Refresh access token
     path('token/refresh/', RefreshTokenView.as_view()),
 
-    # Confirm account after registration
-    path('account/confirm/', ActivateAccountView.as_view()),
+    # Activate account after registration
+    path('account/activation/', ActivateAccountView.as_view()),
 
     # Reset password of user
-    path('password/change/', ChangePasswordView.as_view()),
+    path('new-password/', ChangePasswordView.as_view()),
 
     # Reset password of user
-    path('password/forget/', ForgetPasswordView.as_view()),
+    path('password-recovery/', ForgotPasswordView.as_view()),
 
     # Reset password of user
-    path('password/reset/', NewPasswordConfirmView.as_view()),
+    path('password-recovery/confirmation/', NewPasswordConfirmView.as_view()),
 
-    # Delete all refresh tokens
+    # Delete refresh token
     path('logout/', LogoutView.as_view()),
 
     # User info
     path('user/', UserView.as_view()),
 
     # If user was authenticated
-    path('is-auth/', IsAuthView.as_view()),
+    path('authentication-check/', IsAuthView.as_view()),
 ]

@@ -2,11 +2,11 @@
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
 
-# Local
-from ..serializers import LoginUserSerializer
-
 # Third-party
 from ..views import CommonPostView
+
+# Local
+from ..serializers import LoginUserSerializer
 
 
 class AdminUserLogin(CommonPostView, GenericAPIView):

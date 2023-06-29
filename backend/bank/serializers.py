@@ -1,8 +1,11 @@
+# Django
+from django.conf import settings
+
 # DRF
 from rest_framework import serializers
 
-# Django
-from django.conf import settings
+# Third-party
+from abstracts.serializers import CheckFieldsValidSerializer
 
 # Local
 from .models import (
@@ -16,17 +19,16 @@ from .validators import (
 )
 from .services.transaction_utils import check_balance
 
-# Third-party
-from abstracts.serializers import CheckFieldsValidSerializer
-
 
 class ShowCardsSerializer(CheckFieldsValidSerializer):
     """
     Serializer for create card view.
     """
 
-    number: str = serializers.CharField(max_length=16, min_length=16)
-    cvv: str = serializers.CharField(max_length=3, min_length=3)
+    number: str = serializers.CharField(max_length=16, min_length=16,
+                                        required=True)
+    cvv: str = serializers.CharField(max_length=3, min_length=3,
+                                     required=True)
     balance: float = serializers.SerializerMethodField(
         method_name='get_balance'
     )
@@ -56,8 +58,10 @@ class ShowTransactionsSerializer(CheckFieldsValidSerializer):
     receiver: str = serializers.SerializerMethodField(
         method_name='get_receiver'
     )
-    currency: str = serializers.CharField(max_length=3, min_length=3)
-    balance: float = serializers.DecimalField(max_digits=8, decimal_places=2)
+    currency: str = serializers.CharField(max_length=3, min_length=3,
+                                          required=True)
+    balance: float = serializers.DecimalField(max_digits=8, decimal_places=2,
+                                              required=True)
 
     def get_sender(self, obj: Transaction) -> str:
         """
@@ -79,10 +83,14 @@ class DoTransactionSerializer(CheckFieldsValidSerializer):
     Serializer to do transactions between users.
     """
 
-    balance: float = serializers.DecimalField(max_digits=8, decimal_places=2)
-    currency: str = serializers.CharField(max_length=3, min_length=3)
-    number1: str = serializers.CharField(max_length=16, min_length=16)
-    number2: str = serializers.CharField(max_length=16, min_length=16)
+    balance: float = serializers.DecimalField(max_digits=8, decimal_places=2,
+                                              required=True)
+    currency: str = serializers.CharField(max_length=3, min_length=3,
+                                          required=True)
+    number1: str = serializers.CharField(max_length=16, min_length=16,
+                                         required=True)
+    number2: str = serializers.CharField(max_length=16, min_length=16,
+                                         required=True)
 
     def validate(self, attrs: dict) -> dict:
         """
@@ -113,10 +121,14 @@ class ConvertCurrencySerializer(CheckFieldsValidSerializer):
     Serializer to check, if currency convertation is available.
     """
 
-    number: str = serializers.CharField(max_length=16, min_length=16)
-    balance: float = serializers.DecimalField(max_digits=8, decimal_places=2)
-    currency1: str = serializers.CharField(max_length=3, min_length=3)
-    currency2: str = serializers.CharField(max_length=3, min_length=3)
+    number: str = serializers.CharField(max_length=16, min_length=16,
+                                        required=True)
+    balance: float = serializers.DecimalField(max_digits=8, decimal_places=2,
+                                              required=True)
+    currency1: str = serializers.CharField(max_length=3, min_length=3,
+                                           required=True)
+    currency2: str = serializers.CharField(max_length=3, min_length=3,
+                                           required=True)
 
     def validate(self, attrs: dict) -> dict:
         """
@@ -153,37 +165,44 @@ class ConvertCurrencySerializer(CheckFieldsValidSerializer):
         return attrs
 
 
-class ReplenishmentSerializer(CheckFieldsValidSerializer):
+class BalanceSerializer(CheckFieldsValidSerializer):
     """
-    Serializer for user to replenish balance.
+    Serializer for user to replenish or withdraw balance.
     """
 
-    number: str = serializers.CharField(max_length=16, min_length=16)
-    balance: float = serializers.DecimalField(max_digits=8, decimal_places=2)
-    currency: str = serializers.CharField(max_length=3)
+    virt_number: str = serializers.CharField(max_length=16, min_length=16,
+                                             required=True)
+    balance: float = serializers.DecimalField(max_digits=8, decimal_places=2,
+                                              required=True)
+    currency: str = serializers.CharField(max_length=3, required=True)
+    real_number: str = serializers.CharField(max_length=16, min_length=16,
+                                             required=True)
+    is_withdraw: bool = serializers.BooleanField(default=False)
 
     def validate(self, attrs: dict) -> dict:
         """
         Data validation.
         """
-        number: str = attrs.get('number')
+        virt_number: str = attrs.get('virt_number')
         balance: str = attrs.get('balance')
         currency: str = attrs.get('currency')
+        is_withdraw: str = attrs.get('is_withdraw')
 
         # Check if currency that user want to get is valid
         currency_validation_error(currency1=currency, raise_exception=True)
 
         # Check if data to do transaction is valid
-        do_transaction_validation_error(user=self.user, number1=number,
+        do_transaction_validation_error(user=self.user,
+                                        number1=virt_number,
                                         raise_exception=True)
 
         # Validate if user can replenish currency
-        balance_validation_error(balance=balance, number=number,
-                                 check_card_balance=False, currency=currency,
+        balance_validation_error(balance=balance, number=virt_number,
+                                 check_card_balance=True
+                                 if is_withdraw else False,
+                                 currency=currency,
                                  raise_exception=True)
 
-        # Add number2 key to then recognize the card number
-        # as a receiver in create_transaction function
-        attrs['number2'] = number
+        del attrs['is_withdraw']
 
         return attrs

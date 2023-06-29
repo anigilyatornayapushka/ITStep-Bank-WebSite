@@ -1,0 +1,56 @@
+{% extends "base.html" %}user_code
+
+{% load static %}
+
+{% block title %}
+    Log in
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include "navbar.html" %}
+    <div class="login">
+        <div class="login-container">
+            <div class="left-side">
+                <div id="divOne">
+                    <p>ACCOUNT LOGIN</p>
+                </div>
+                <div id="divTwo">
+                    <div>
+                        <div>EMAIL</div>
+                        <input id="email-input" type="text" name="email">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <div>
+                        <div>PASSWORD</div>
+                        <input id="password-input" type="password" name="password">
+                        <i id="password-eye" class="bi bi-eye-slash"></i>
+                    </div>
+                </div>
+                <div id="divThree">
+                    <label for="rememberMe">
+                        <input type="checkbox" id="rememberMe">&nbsp;Remember me
+                    </label>
+                    <a href="/forgot-password/" id="forgot">Forgot Password?</a>
+                </div>
+                <div id="divFour">
+                    <div class="frame" id="black-print">
+                        <img src="/media/login/black-fingerprint.png">
+                    </div>
+                    <div class="frame" id="gradient-print">
+                        <img src="/media/login/gradient-fingerprint.png">
+                    </div>
+                    <div class="frame" id="fingerprint-display"></div>
+                    <p class="info-p">Click and hold to login!</p>
+                </div>
+            </div>
+            <div class="right-side"></div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/login/login.js' %}"></script>
+{% endblock %}

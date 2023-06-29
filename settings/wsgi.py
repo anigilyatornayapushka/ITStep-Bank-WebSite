@@ -1,9 +1,9 @@
+# Django
+from django.core.handlers.wsgi import WSGIHandler
+from django.core.wsgi import get_wsgi_application
+
 # Python
 import os
-
-# Django
-from django.core.wsgi import get_wsgi_application
-from django.core.handlers.wsgi import WSGIHandler
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.base')

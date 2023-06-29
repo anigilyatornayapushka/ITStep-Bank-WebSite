@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include "navbar.html" %}
+    <div class="about">
+        <div class="container">
+            <div class="about-text-container">
+                <p><b>ItStepBank</b> - a reliable and innovative payment processing system.</p>
+    
+                <p>We offer a secure and user-friendly solution for your needs.</p>
+                    
+                <p>Our system ensures a high level of data protection and ease of use.</p>
+                    
+                <p>Join us today and streamline your payment process!</p>
+            </div>
+        </div>
+    </div>
+    <div class="use">
+        <div class="use-container">
+            <a href="/account/">
+                Start using system right now
+            </a>
+        </div>
+    </div>
+    <div class="advantages">
+        <div class="container">
+            <div class="advantages-container" id="i1">
+                <p>
+                    <i class="bi bi-lock-fill"
+                       style="color: rgb(54, 42, 109)"></i>
+                    <span>Our system ensures safety :</span>
+                </p>
+                <p>
+                    <i class="bi bi-fingerprint"
+                       style="color: rgb(204, 189, 160)"></i>
+                    <span>Browser fingerprint to protect against intruders</span>
+                </p>
+                <p>
+                    <i class="bi bi-tv-fill"
+                       style="color: rgb(189, 189, 189)"></i>
+                    <span>IP verification to prevent data theft</span>
+                </p>
+                <p>
+                    <i class="bi bi-server"
+                       style="color: rgb(35, 54, 163)"></i>
+                    <span>Strong database, can withstand heavy load</span>
+                </p>
+                <p>
+                    <i class="bi bi-shield-fill-check"
+                       style="color: rgb(73, 73, 73)"></i>
+                    <span>Good data encryption and key storage</span>
+                </p>
+            </div>
+            <div class="advantages-container" id="i2">
+                <p>
+                    <i class="bi bi-sunglasses"
+                       style="color: rgb(3, 7, 32)"></i>
+                    <span>Why you should choose us :</span>
+                </p>
+                <p>
+                    <i class="bi bi-speedometer"
+                       style="color: rgb(68, 170, 42)"></i>
+                    <span>Instant creation of a virtual card</span>
+                </p>
+                <p>
+                    <i class="bi bi-heart-fill"
+                       style="color: rgb(255, 0, 0)"></i>
+                    <span>User-friendly interface</span>
+                </p>
+                <p>
+                    <i class="bi bi-cash-coin"
+                       style="color: rgb(161, 224, 159)"></i>
+                    <span>Maintaining different currencies</span>
+                </p>
+                <p>
+                    <i class="bi bi-hand-thumbs-up-fill"
+                       style="color: rgb(255, 217, 4)"></i>
+                    <span>Good feedback directly from the developer</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="functions">
+        <div class="outer-function-container">
+            <div class="functions-container">
+                <img src="/media/homepage/card.png"
+                     id="functions-card">
+                <h2>Create 3 virtual cards</h2>
+            </div>
+            <div class="functions-container">
+                <img src="/media/homepage/currency-convertation.png"
+                     id="currency-convert">
+                <h2>Convert diferent currencies</h2>
+            </div>
+            <div class="functions-container">
+                <img src="/media/homepage/balance-replenishment.png"
+                     id="currency-convert">
+                <h2>Replenish your balance</h2>
+            </div>
+        </div>
+    </div>
+    <div class="join">
+        <div class="container">
+            <p>
+                Join the list of ITStepBank users and
+                enjoy the convenience of this system
+            </p>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-upper">
+            <div class="container">
+                <div>
+                    <b>Contacts</b>
+                    <i> 
+                        <a href="mailto:itstepbankwebsite@gmail.com">Inbox</a>
+                    </i>
+                </div>
+                <div>
+                    <b>Start using</b>
+                    <i>
+                        <a href="/reg/">Register</a>
+                    </i>
+                    <i>
+                        <a href="/login/">Log in</a>
+                    </i>
+                    <i>
+                        <a href="/forgot-password/">Reset password</a>
+                    </i>
+                </div>
+                <div>
+                    <b>Follow me</b>
+                    <i>
+                        <a href="https://github.com/anigilyatornayapushka"
+                           target="_blank">Github</a>
+                    </i>
+                    <i>
+                        <a href="https://vk.com/yyycka"
+                           target="_blank">Vk</a>
+                    </i>
+                    <i>
+                        <a href="https://t.me/zusjjaka"
+                           target="_blank">Telegram</a>
+                    </i>
+                    <i>
+                        <a href="https://wa.me/87776548573"
+                           target="_blank">Whatsapp</a>
+                    </i>
+                </div>
+            </div>
+        </div>
+        <div class="footer-lower">
+            <div class="container">
+                <div id="d1">
+                    <a href="https://github.com/anigilyatornayapushka/ITStep-Bank-WebSite/blob/main/LICENSE"
+                       target="_blank">© 2023 ItStepBank</a>
+                    <a href="/information/#terms">Terms</a>
+                    <a href="/information/#privacy">Privacy Policy</a>
+                    <a href="/information/#sitemap">Sitemap</a>
+                </div>
+                <div id="d2">
+                    <a href="mailto:itstepbankwebsite@gmail.com">
+                        <i class="bi bi-envelope"></i>
+                    </a>
+                    <a href="https://github.com/anigilyatornayapushka" target="_blank">
+                        <i class="bi bi-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

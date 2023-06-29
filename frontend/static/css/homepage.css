@@ -1,0 +1,394 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu);
+
+*
+{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body
+{
+    background: rgb(22, 27, 34);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.about
+{
+    display: flex;
+    justify-content: center;
+    background: rgb(31, 56, 126);
+    height: 175px;
+    min-height: 175px;
+    width: 100%;
+    margin-top: 80px;
+}
+
+.about-text-container
+{
+    width: 600px;
+    height: 90%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    font-size: large;
+}
+
+@media (max-width: 600px)
+{
+    .about-text-container
+    {
+        width: 300px;
+        align-items: center;
+        font-size: small;
+    }
+}
+
+.advantages
+{
+    min-height: 450px;
+    height: 450px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-image: url('/media/homepage/homepage-bg1.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.use
+{
+    width: 100%;
+    height: 70px;
+    background: rgb(13, 17, 23);
+    display: flex;
+    justify-content: center;
+}
+
+.use-container
+{
+    width: 600px;
+    height: 70px;
+    min-height: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.use-container a
+{
+    font-size: 130%;
+}
+
+.use-container a:hover
+{
+    text-decoration: none;
+}
+
+.advantages-container
+{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#i1
+{
+    align-items: flex-end;
+    padding-right: 90px;
+}
+
+#i2
+{
+    align-items: flex-start;
+    padding-left: 90px;
+}
+
+.advantages-container p, i
+{
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-family: 'Ubuntu';
+}
+
+.advantages-container span
+{
+    font-size: 110%;
+}
+
+@media (max-width: 1000px)
+{
+    .advantages-container
+    {
+        width: 100%;
+    }
+    .advantages-container span, i
+    {
+        font-size: 75%;
+    }
+    .advantages-container
+    {
+        margin: auto;
+        height: 60%;
+    }
+}
+
+@media (max-width: 600px)
+{
+    #i1
+    {
+        padding-right: 15px;
+    }
+
+    #i2
+    {
+        padding-left: 15px;
+    }
+
+    .advantages-container span, i
+    {
+        font-size: 50%;
+    }
+}
+
+.functions
+{
+    display: flex;
+    justify-content: center;
+    background: white;
+    height: 230px;
+    width: 100%;
+}
+
+.outer-function-container
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    max-width: 1100px;
+    width: 1100px;
+    height: 100%;
+}
+
+.functions-container
+{
+    padding: 30px 0px;
+    width: 30%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.functions-container h2
+{
+    font-size: 140%;
+    color: rgb(51, 51, 51);
+    font-weight: 600;
+    font-family: 'Ubuntu';
+}
+
+#functions-card
+{
+    width: 200px;
+    height: 120px;
+}
+
+#currency-convert
+{
+    width: 120px;
+    height: 120px;
+}
+
+@media (max-width: 1000px)
+{
+    .functions
+    {
+        height: 750px;
+    }
+    .outer-function-container
+    {
+        flex-direction: column;
+        align-items: center;
+    }
+    .functions-container
+    {
+        width: 100%;
+    }
+}
+
+.join
+{
+    display: flex;
+    justify-content: center;
+    background: rgb(31, 56, 126);
+    min-height: 70px;
+    width: 100%;
+}
+
+.join .container p
+{
+    color: rgb(255, 255, 255);
+    font-size: 140%;
+    font-family: 'Ubuntu';
+    text-align: center;
+    font-weight: bolder;
+    margin: auto;
+}
+
+@media (max-width: 600px)
+{
+    .join .container p
+    {
+        font-size: 100%;
+    }
+}
+
+.footer
+{
+    height: 180px;
+    width: 100%;
+}
+
+.footer-lower
+{
+    width: 100%;
+    height: 30px;
+    min-height: 30px;
+    background: rgb(22, 27, 34);
+    display: flex;
+    justify-content: center;
+}
+
+.footer-lower .container
+{
+    width: 1400px;
+    display: flex;
+}
+
+.footer-lower .container div
+{
+    width: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.container div a
+{
+    text-decoration: none;
+}
+
+.container div a:hover
+{
+    text-decoration: underline;
+}
+
+.footer-lower .container div#d1
+{
+    justify-content: space-evenly;
+    font-size: 80%;
+}
+
+.footer-lower .container div#d2
+{
+    justify-content: flex-end;
+}
+
+.footer-lower .container div i
+{
+    font-size: larger;
+    color: rgb(149, 157, 165);
+    margin-right: 50px;
+}
+
+.footer-lower .container div i:hover
+{
+    color: rgb(215, 230, 248);
+}
+
+.footer-lower .container p
+{
+    font-size: small;
+    color: #7d8590
+}
+
+@media (max-width: 600px)
+{
+    .footer-lower .container #d1 a
+    {
+        font-size: 50%;
+    }
+}
+
+.footer-upper
+{
+    width: 100%;
+    height: 150px;
+    min-height: 150px;
+    background: rgb(13, 17, 23);
+    display: flex;
+    justify-content: center;
+}
+
+.footer-upper .container
+{
+    justify-content: center;
+}
+
+.footer-upper .container div
+{
+    width: 250px;
+    height: 150px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-upper .container div i
+{
+    margin-top: 2px;
+    font-size: smaller;
+    font-weight: 400;
+}
+
+@media (max-width: 800px)
+{
+    .footer-upper .container
+    {
+        width: 600px;
+    }
+
+    .footer-upper
+    {
+        min-height: 100px;
+        height: 100px;
+    }
+
+    .footer-upper .container div i
+    {
+        margin-top: 2px;
+        font-size: xx-small;
+        font-weight: 400;
+    }
+}
+
+@media (max-width: 600px)
+{
+    .footer-upper .container
+    {
+        width: 300px;
+    }
+}

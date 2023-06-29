@@ -1,7 +1,7 @@
 # Django
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth import get_user_model
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 
 
 User: AbstractBaseUser = get_user_model()

@@ -35,7 +35,7 @@ DJANGO_APPS = (
 
     'corsheaders',
 
-    'debug_toolbar',
+    # 'debug_toolbar',
     'django_extensions',
     'rest_framework',
     'rest_framework_simplejwt',
@@ -63,9 +63,14 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'middlewares.secure_middleware.SecureMiddleware'
 )
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = None
 
 ROOT_URLCONF = 'settings.urls'
 
@@ -94,24 +99,16 @@ DB_PASS = decouple.config('DB_PASS', cast=str)
 DB_HOST = decouple.config('DB_HOST', cast=str)
 DB_PORT = decouple.config('DB_PORT', cast=str)
 
-if DEBUG is True:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'testdb.sqlite3',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASS,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': DB_NAME,
-            'USER': DB_USER,
-            'PASSWORD': DB_PASS,
-            'HOST': DB_HOST,
-            'PORT': DB_PORT
-        }
-    }
+}
 
 LANGUAGE_CODE = 'en'
 
@@ -137,8 +134,8 @@ ALLOWED_DOMAINS: tuple[str, ...] = ('inbox.ru', 'mail.ru',
 # CELERY
 # ---------------------------------------------------------------------
 
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+CELERY_RESULT_BACKEND = 'django-db'
 
 # CURRENCY
 # ---------------------------------------------------------------------
@@ -211,6 +208,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
+    'DEFAULT_AUTH_COOKIE_HTTPONLY': True,
 }
 
 # SIMPLE JWT
@@ -218,7 +216,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(hours=3),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(weeks=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': True,

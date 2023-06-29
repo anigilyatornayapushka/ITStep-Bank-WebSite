@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Registration{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/reg.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include "navbar.html" %}
+    <div class="registration">
+        <div class="registration-container">
+            <form class="registration-form">
+                <p class="registration-p">Registration</p>
+                <div>
+                    <i name="outer" class="bi bi-person-fill"
+                       id="first_name_icon">
+                        <input type="text" placeholder="First name"
+                               name="first_name" id="first_name"
+                               required>
+                        <i class="bi bi-exclamation-triangle"
+                           name="inner" id="first_name_validator"></i>
+                    </i>
+                </div>
+                <div>
+                    <i name="outer" class="bi bi-person-fill"
+                       id="last_name_icon">
+                        <input type="text" placeholder="Last name"
+                               name="last_name" id="last_name"
+                               required>
+                        <i class="bi bi-exclamation-triangle"
+                           name="inner" id="last_name_validator"></i>
+                    </i>
+                </div>
+                <div>
+                    <i name="outer" class="bi bi-person-fill"
+                       id="email_icon">
+                        <input type="text" name="email" id="email"
+                               placeholder="Email" required>
+                        <i class="bi bi-exclamation-triangle"
+                           name="inner" id="email_validator"></i>
+                    </i>
+                </div>
+                <div>
+                    <i name="outer" class="bi bi-unlock-fill"
+                       id="password_icon">
+                        <input type="password" placeholder="Password"
+                               name="password" id="password"
+                               required>
+                        <i class="bi bi-exclamation-triangle"
+                           name="inner" id="password_validator"></i>
+                        <i class="bi bi-eye-slash" name="eye"
+                           id="password_eye"></i>
+                    </i>
+                </div>
+                <div>
+                    <i name="outer" class="bi bi-unlock-fill"
+                       id="password2_icon">
+                        <input type="password" placeholder="Repeat password"
+                               name="password2" id="password2" required>
+                        <i class="bi bi-exclamation-triangle"
+                           name="inner" id="password2_validator"></i>
+                           <i class="bi bi-eye-slash" name="eye"
+                              id="password2_eye"></i>
+                    </i>
+                </div>
+                <p class="genders">
+                    <label for="male">
+                        <input type="radio" name="gender"
+                               value="1" id="male"
+                               checked required>
+                        Male
+                    </label>
+                    <label for="female">
+                        <input type="radio" name="gender"
+                               value="2" id="female">
+                        Female
+                    </label>
+                </p>
+                <button id="register" type="submit"><p>Register</p></button>
+                    <label for="agree" id="agree-label">
+                        <input type="checkbox" id="agree">
+                        <p>
+                            <span>I agree with <a href="/terms/">Terms</a> and</span>
+                            <a href="/policy/">Privacy Policy</a>
+                        </p>
+                    </label>
+                <p class="form-login">
+                    Already have account?
+                    <a href="/login/">Log in</a>
+                </p>
+            </form>
+        </div>
+    </div>
+    <div class="hints">
+        <div class="hints-container">
+            <p>Click on some field to view hints</p>
+        </div>
+    </div>
+    <script src="{% static 'js/reg/reg.js' %}"></script>
+    <script src="{% static 'js/reg/beautify.js' %}"></script>
+{% endblock %}

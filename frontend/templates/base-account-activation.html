@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Account activation{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/account-activation.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include "navbar.html" %}
+    <div class="verification">
+        <div class="verification-container">
+            <div class="verification-block">
+                <div id="divZero" class="content">
+                    <i class="bi bi-envelope-fill" id="envelope">
+                        <p>VERIFY YOUR EMAIL ADDRESS</p>
+                    </i>
+                    <hr>
+                </div>
+                <div id="divOne" class="content">
+                    <p>A verification code is sent to your</p>
+                    <p>email after registration</p>
+                </div>
+                <div id="divTwo" class="content">
+                    Please enter your email so we can understand
+                    which account you are trying to verify or use
+                    link, that was sent on your inbox.
+                </div>
+                <div id="divThree" class="content">
+                    <input type="email" class="get-email-input" placeholder="Your email">
+                </div>
+                <div id="divFour" class="content">
+                    <button id="verify"><p>Continue</p></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/account-activation/base-account-activation.js' %}"></script>
+{% endblock %}

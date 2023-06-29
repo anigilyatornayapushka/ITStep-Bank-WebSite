@@ -13,15 +13,15 @@ StepIT graduate work
 
 - Change Password.
 
-- Creation and binding of kaspi type cards to the user.
+- Creation and binding of virtual cards to the user.
 
 - Currency convertation.
 
 - Money transfer between users.
 
-- Money replenishment.
+- Money replenishment and withdrawing.
 
-- Showing all transactions with ability to filter it.
+- Check all transactions with ability to filter it.
 
 ## Requirements
 

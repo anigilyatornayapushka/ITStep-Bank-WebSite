@@ -1,0 +1,227 @@
+body
+{
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(to right, rgb(19, 98, 177), rgb(9, 63, 117) 33%, rgb(6, 35, 94) 75%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.registration
+{
+    margin-top: 120px;
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+.registration-container {
+    display: flex;
+    justify-content: center;
+    max-width: 1100px;
+    width: 1100px;
+    height: 100%;
+}
+
+.registration-form
+{
+    background: rgb(27, 29, 41);
+    height: 500px;
+    width: 380px;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+@media (max-height: 600px)
+{
+    .registration-form
+    {
+        zoom: 0.4;
+    }
+    
+    .hints-container *
+    {
+        font-size: xx-small;
+    }
+
+    .registration-container {
+        width: 200px;
+    }
+
+    #agree-label
+    {
+        zoom: 0.8;
+    }
+}
+
+.registration-form i[name="outer"]
+{
+    position: relative;
+    color: white;
+    padding-left: 5px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgb(49, 203, 210);
+    width: 100%;
+}
+
+.registration-form div
+{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+
+.registration-form div i[name="inner"]
+{
+    display: block;
+    position: absolute;
+    top: -13px;
+    right: -13px;
+    font-size: small;
+    color: rgb(255, 123, 0);
+}
+
+.registration-form div i[name="eye"]
+{
+    display: block;
+    position: absolute;
+    bottom: 5px;
+    right: 0;
+}
+
+.registration-form i input
+{
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    width: 80%;
+}
+
+input:-webkit-autofill {
+    transition: all 5000s ease-in-out;
+}
+
+.registration-form i input::placeholder
+{
+    color: rgb(96, 98, 110);
+}
+
+.registration-form i input:focus::placeholder
+{
+    color: white;
+}
+
+.registration-form .registration-p
+{
+    color: rgb(49, 203, 210);
+    font-weight: bolder;
+    font-size: x-large;
+}
+
+.genders
+{
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#agree-label
+{
+    width: 245px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: -15px;
+    font-size: small;
+}
+
+#agree-label span
+{
+    color: rgb(96, 98, 110);
+}
+
+#agree-label a
+{
+    color: white;
+    text-decoration: none;
+}
+
+#agree-label a:hover
+{
+    text-decoration: underline;
+}
+
+#register
+{
+    background: rgb(49, 203, 210);
+    width: 80%;
+    height: 35px;
+    border-radius: 5px;
+    border: none;
+}
+
+#register:hover
+{
+    background: rgb(38, 175, 182);
+}
+
+#register:active
+{
+    background: rgb(28, 150, 156);
+}
+
+#register p
+{
+    color: rgb(27, 29, 41);
+    font-size: large;
+    font-weight: bold;
+}
+
+.form-login
+{
+    color: rgb(96, 98, 110);
+}
+
+.form-login a
+{
+    color: rgb(49, 203, 210);
+    text-decoration: none;
+}
+
+.form-login a:hover
+{
+    text-decoration: underline;
+}
+
+.hints
+{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hints-container
+{
+    padding-top: 5px;
+    text-align: center;
+    text-align: left;
+    font-size: medium;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1100px;
+    width: 380px;
+    height: 100%;
+    border-radius: 10px;
+}

@@ -3,39 +3,59 @@ from django.urls import path
 
 # Local
 from .views import (
-    BaseView,
+    HomePageView,
     RegistrationView,
-    LoginView,
     AccountActivationView,
-    ForgetPasswordView,
-    LogoutView,
-    ChangePasswordView,
-    BankView,
+    AccountActivationBaseView,
+    LoginView,
+    InformationView,
+    ForgotPasswordView,
+    ProfileView,
+    ReplenishBalanceView,
+    NewPasswordView,
+    TransactionView,
+    WithdrawMoneyView,
+    CurrencyConvertationView,
 )
 
 
 urlpatterns = [
     # Homepage
-    path('', BaseView.as_view()),
+    path('', HomePageView.as_view()),
 
     # Registration
     path('reg/', RegistrationView.as_view()),
 
-    # Logging in
+    # Account activation base
+    path('account/activation/', AccountActivationBaseView.as_view()),
+
+    # Account activation
+    path('account/activation/<str:email>/', AccountActivationView.as_view()),
+
+    # Login user
     path('login/', LoginView.as_view()),
 
-    # Activate account
-    path('account-activate/', AccountActivationView.as_view()),
+    # Privacy policy
+    path('information/', InformationView.as_view()),
 
-    # Restore password
-    path('restore-password/', ForgetPasswordView.as_view()),
+    # Forgot password
+    path('forgot-password/', ForgotPasswordView.as_view()),
 
-    # Logging out
-    path('logout/', LogoutView.as_view()),
+    # Forgot password
+    path('account/', ProfileView.as_view()),
 
-    # Change password
-    path('password-change/', ChangePasswordView.as_view()),
+    # Replenish balance
+    path('balance-replenishment/', ReplenishBalanceView.as_view()),
 
-    # Main application
-    path('bank/', BankView.as_view()),
+    # Replenish balance
+    path('new-password/', NewPasswordView.as_view()),
+
+    # Do transaction.
+    path('transaction/', TransactionView.as_view()),
+
+    # Withdraw money
+    path('withdraw/', WithdrawMoneyView.as_view()),
+
+    # Convert currency
+    path('/currency-convertation/', CurrencyConvertationView.as_view())
 ]

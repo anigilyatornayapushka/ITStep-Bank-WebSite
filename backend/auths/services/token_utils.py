@@ -1,15 +1,32 @@
+# Django
+from django.utils import timezone
+
+# JWT
+from rest_framework_simplejwt.settings import USER_SETTINGS
+
 # Python
 import typing as t
 import datetime
 
 # Local
 from ..models import TokenWhiteList
+from ..utils import Sha256Hasher
 
-# JWT
-from rest_framework_simplejwt.settings import USER_SETTINGS
 
-# Django
-from django.utils import timezone
+def check_refresh_token_validity(refresh_token: str) -> bool:
+    """
+    Check if refresh token is registered in database.
+    """
+    # Define hasher
+    hasher: Sha256Hasher = Sha256Hasher()
+
+    # Hash token to check it is in database
+    hashed_refresh_token: str = hasher.hash(refresh_token)
+
+    exists: bool = TokenWhiteList.objects.filter(
+        refresh_token=hashed_refresh_token).exists()
+    
+    return exists
 
 
 def add_token_to_db(**kwargs: t.Any) -> None:
@@ -29,10 +46,14 @@ def add_token_to_db(**kwargs: t.Any) -> None:
     datetime_expire: datetime.datetime =\
         timezone.now() + USER_SETTINGS.get('REFRESH_TOKEN_LIFETIME')
 
+    # Define hasher
+    hasher: Sha256Hasher = Sha256Hasher()
+    token: str = kwargs.get('token')
+
     # Add new token in database
     TokenWhiteList.objects.create(
         user=kwargs.get('user'),
-        refresh_token=kwargs.get('token'),
+        refresh_token=hasher.hash(token),
         expire_datetime=datetime_expire,
         fingerprint=kwargs.get('fingerprint'),
         ip=kwargs.get('ip')

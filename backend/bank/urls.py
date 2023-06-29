@@ -9,6 +9,7 @@ from .views import (
     ShowTransactionsView,
     ConvertCurrencyView,
     BalanceReplenishmentView,
+    BalanceWithdrawView,
 )
 
 
@@ -28,6 +29,9 @@ urlpatterns = [
     # Convert balance from one currency to another
     path('convert-currency/', ConvertCurrencyView.as_view()),
 
-    # Convert balance from one currency to another
+    # Replenish balance on user virtual card
     path('balance-replenishment/', BalanceReplenishmentView.as_view()),
+
+    # Withdraw balance on user real card
+    path('balance-withdraw/', BalanceWithdrawView.as_view()),
 ]

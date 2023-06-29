@@ -7,15 +7,12 @@ from django.db.models.signals import (
     post_save,
 )
 
-# Local
-from .models import AccountCode
-from .tasks import (
-    send_account_activation_email,
-    send_reset_password_email,
-)
-
 # Python
 import typing as t
+
+# Local
+from .models import AccountCode
+from .utils import TextEmailSender
 
 
 User: AbstractBaseUser = get_user_model()
@@ -37,6 +34,37 @@ def accountcode_pre_save(instance: AccountCode, **kwargs: t.Any) -> None:
     """
     user: User = instance.user
     if instance.code_type == AccountCode.ACCOUNT_ACTIVATION:
-        send_account_activation_email(user.email, user.fullname, instance.code)
+        sender: TextEmailSender = TextEmailSender(
+            send_to=user.email,
+            subject='Account activation',
+            message=(
+                'Dear %s,\n\n'
+                'We are delighted to welcome you and inform you of '
+                'your successful registration. As part of\nthe registration '
+                'process, we have generated a unique activation code for you.'
+                '\nPlease find your code below:\n\nActivation Code: %s\n\n'
+                'To complete the registration, please click on the\n'
+                'following link: http://127.0.0.1:8000/account/activation/%s/'
+                '\n\nOnce you click on the link, you will be redirected to'
+                'our website, where you can enter the\nactivation code and'
+                'proceed with the next steps.\n\nIf you have any questions'
+                'or need assistance, please feel free to reach out to our'
+                'support\nteam. We are here to help you.\n\nThank you once'
+                'again for choosing our platform.\n\nWe look forward to '
+                'your active participation.\n\nBest regards,\n\nItStepBank'
+            ) % (user.fullname, instance.code, user.email)
+        )
+        sender.send_email()
     elif instance.code_type == AccountCode.PASSWORD_RESET:
-        send_reset_password_email(user.email, user.fullname, instance.code)
+        sender: TextEmailSender = TextEmailSender(
+            send_to=user.email,
+            subject='Password reset',
+            message=(
+                'Hello, %s.'
+                'Enter this code on the site to reset a password:\n'
+                '%s\n'
+                'If it wasn\'t you, just ignore the message'
+                % (user.fullname, instance.code)
+            )
+        )
+        sender.send_email()

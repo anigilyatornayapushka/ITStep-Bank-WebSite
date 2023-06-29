@@ -2,11 +2,11 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth import get_user_model
 
-# Local
-from ..models import Card
-
 # Python
 import random
+
+# Local
+from ..models import Card
 
 
 User: AbstractBaseUser = get_user_model()

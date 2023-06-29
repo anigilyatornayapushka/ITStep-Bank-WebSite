@@ -1,22 +1,63 @@
-# Local
-from ..models import (
-    Card,
-    Transaction,
-)
-from ..caches import RedisConnector
-
-# DRF
-from rest_framework import serializers
-
 # Django
 from django.db.models import Sum
 from django.db import transaction
 from django.conf import settings
 
+# DRF
+from rest_framework import serializers
+
 # Python
 import typing as t
 import requests
 from decimal import Decimal
+
+# Local
+from ..models import (
+    Card,
+    Transaction,
+)
+from ..caches import LocalRedisConnector
+import abc
+
+
+class BaseTransfer(metaclass=abc.ABCMeta):
+    """
+    Base transfer between real and virtual cards.
+    """
+
+    @abc.abstractmethod
+    def from_real_to_virtual(self, real_number: str, virt_number: str,
+                             balance: Decimal, currency: str) -> None:
+        """
+        Transfer money from real card to the user virtual one.
+        """
+        pass
+
+    @abc.abstractmethod
+    def from_virtual_to_real(self, real_number: str, virt_number: str,
+                             balance: Decimal, currency: str) -> None:
+        """
+        Transfer money from virtual card to the user real one.
+        """
+        pass
+
+
+class MockTransfer(BaseTransfer):
+    """
+    Imititaion of transwer between real and virtial cards.
+    """
+
+    def from_real_to_virtual(self, real_number: str, virt_number: str,
+                             balance: Decimal, currency: str) -> None:
+        # Put money into an account
+        create_transaction(number1=None, number2=virt_number,
+                           balance=balance, currency=currency)
+
+    def from_virtual_to_real(self, real_number: str, virt_number: str,
+                             balance: Decimal, currency: str) -> None:
+        # Withdraw money from the account
+        create_transaction(number1=virt_number, number2=None,
+                           balance=balance, currency=currency)
 
 
 def check_balance(number: str, currency: str) -> float:
@@ -82,7 +123,7 @@ def get_the_exchange_rate(currency1: str, currency2: str) -> float:
     """
 
     # Use redis connector to conect with redis
-    with RedisConnector(db=0) as server:
+    with LocalRedisConnector(db=0) as server:
 
         # Define key for the user request
         key: str = currency1 + currency2
@@ -119,7 +160,7 @@ def do_currency_convertation(**kwargs: t.Any) -> None:
     """
     Do currency convertation. Kwargs must contain
 
-    number, currency1, currency2, balance.
+    number, currency1 (from), currency2 (to), balance.
     """
     # Defina variables
     number: str = kwargs.get('number')

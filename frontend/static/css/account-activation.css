@@ -1,0 +1,292 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu);
+
+*
+{
+    font-family: "Ubuntu";
+    color: white;
+}
+
+body
+{
+    height: 100vh;
+    width: 100vw;
+    background: rgb(220, 220, 245);
+    background-image: url("/media/account-activation/account-activation-bg.png");
+    background-repeat: no-repeat;
+    background-position: top center;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.verification
+{
+    margin-top: 120px;
+    width: 100%;
+    height: 510px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.verification-container
+{
+    display: flex;
+    justify-content: center;
+    max-width: 1100px;
+    width: 1100px;
+    height: 475px;
+}
+
+.hints-container
+{
+    font-size: large;
+    text-align: center;
+    width: 1100px;
+    height: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.verification-block
+{
+    width: 410px;
+    height: 475px;
+    background: white;
+}
+
+@media (max-height: 600px)
+{
+    .verification-container
+    {
+        zoom: 0.6;
+    }
+
+    .hints-container
+    {
+        zoom: 0.6;
+    }
+}
+
+@media (max-height: 400px)
+{
+    .verification-container
+    {
+        zoom: 0.5;
+    }
+
+    .hints-container
+    {
+        zoom: 0.5;
+    }
+}
+
+@media (max-height: 300px)
+{
+    .verification-container
+    {
+        zoom: 0.3;
+    }
+
+    .hints-container
+    {
+        zoom: 0.3;
+    }
+}
+
+.content
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 410px;
+}
+
+#divZero
+{
+    height: 140px;
+}
+
+#divZero i
+{
+    text-align: center;
+}
+
+#divZero hr
+{
+    width: 300px;
+    border: none;
+    border-top: 1px solid rgb(235, 235, 235);
+}
+
+#divZero i p
+{
+    word-spacing: 3px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    color: rgb(130, 130, 130);
+}
+
+#divOne
+{
+    height: 35px;
+    font-weight: 500;
+    font-size: small;
+}
+
+#divOne p, a
+{
+    color: rgb(35, 35, 35);
+}
+
+#divTwo
+{
+    width: 410px;
+    height: 100px;
+    padding: 0px 52px;
+    color: rgb(85, 85, 85);
+    justify-content: flex-end;
+}
+
+#envelope
+{
+    color: rgb(37, 67, 150);
+    font-size: large;
+}
+
+#divThree
+{
+    height: 70px;
+    justify-content: center;
+}
+
+.square
+{
+    width: 30px;
+    height: 35px;
+    border-radius: 7px;
+    border: 1px solid rgb(180, 180, 180);
+}
+
+.square:focus
+{
+    border: 1px solid rgb(37, 67, 150);
+}
+
+.beautiful-input-box
+{
+    position: relative;
+    width: 220px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.beautiful-input-box div
+{
+    overflow: hidden;
+}
+
+input
+{
+    outline: none;
+    caret-color: black;
+    color: black;
+    text-align: center;
+    font-size: x-large;
+    width: 15px;
+}
+
+input:-webkit-autofill {
+    transition: all 5000s ease-in-out;
+}
+
+#verify
+{
+    width: 300px;
+    height: 40px;
+    background: rgb(37, 67, 150);
+    border-radius: 4px;
+    border: 1px solid rgb(19, 42, 104);
+}
+
+#verify:hover
+{
+    background: rgb(29, 57, 134);
+}
+
+#verify:active
+{
+    background: rgb(19, 42, 104);
+}
+
+#verify p
+{
+    font-weight: bold;
+}
+
+.actions
+{
+    width: 240px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.actions a
+{
+    color: rgb(37, 67, 150);
+    text-decoration: none;
+}
+
+.actions a:hover
+{
+    text-decoration: underline;
+}
+
+#divFour
+{
+    height: 50px;
+}
+
+#divFive
+{
+    height: 30px;
+}
+
+.get-email-input
+{
+    width: 300px;
+    padding-left: 5px;
+    border-radius: 5px;
+    color: rgb(40, 40, 40);
+    text-align: left;
+    border: 1px solid rgb(180, 180, 180);
+}
+
+.get-email-input:focus
+{
+    border: 1px solid rgb(217, 56, 70);
+}
+
+.get-email-input::placeholder
+{
+    display: flex;
+    align-items: center;
+    font-size: large;
+    color: rgb(200, 200, 200);
+}
+
+#divSix
+{
+    justify-content: flex-start;
+    height: 50px;
+    color: rgb(130, 130, 130);
+    text-align: center;
+    font-size: small;
+}

@@ -1,11 +1,11 @@
 # Django
 from django.contrib import admin
+from django.conf.urls.static import static
 from django.urls import (
     include,
     path,
 )
 from django.conf import settings
-from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -27,9 +27,9 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # DEBUG TOOLBAR
-if settings.DEBUG is True:
+# if settings.DEBUG is True:
 
-    urlpatterns += [
-        # Debug-toolbar when in development mode
-        path('__debug__/', include('debug_toolbar.urls')),
-    ]
+    # urlpatterns += [
+    #     # Debug-toolbar when in development mode
+    #     path('__debug__/', include('debug_toolbar.urls')),
+    # ]

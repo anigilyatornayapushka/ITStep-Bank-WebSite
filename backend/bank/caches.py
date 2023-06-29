@@ -1,41 +1,39 @@
-# Python
-from redis import Redis
-import typing as t
-import pickle
-from abc import (
-    ABCMeta,
-    abstractmethod,
-)
-from cryptography.fernet import Fernet
-
 # Django
 from django.conf import settings
 
+# Python
+import typing as t
+import pickle
+import abc
+from cryptography.fernet import Fernet
+from redis import Redis
 
-class BaseConnection(metaclass=ABCMeta):
+
+class BaseRedisConnection(metaclass=abc.ABCMeta):
     """
     Base connection to any db.
     """
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, db: int, safe: bool) -> None:
+        self.db = db
+        self.safe = safe
 
-    @abstractmethod
-    def get(self) -> t.Any:
+    @abc.abstractmethod
+    def get(self, key: str) -> t.Any:
         """
         Get some value.
         """
         pass
 
-    @abstractmethod
-    def set(self) -> None:
+    @abc.abstractmethod
+    def set(self, key: str, value: t.Any, eta: int = None) -> None:
         """
         Set some value.
         """
         pass
 
 
-class RedisConnection(BaseConnection):
+class LocalRedisConnection(BaseRedisConnection):
     """
     Connetion to redis.
     """
@@ -95,7 +93,7 @@ class RedisConnection(BaseConnection):
         self.server.set(name=key, value=value, ex=eta)
 
 
-class BaseConnector(metaclass=ABCMeta):
+class BaseConnector(metaclass=abc.ABCMeta):
     """
     Base context manager that implements
 
@@ -108,22 +106,22 @@ class BaseConnector(metaclass=ABCMeta):
     def __init__(self) -> None:
         pass
 
-    @abstractmethod
-    def __enter__(self) -> BaseConnection:
+    @abc.abstractmethod
+    def __enter__(self) -> BaseRedisConnection:
         """
         Return connection with database to interract with it.
         """
         pass
 
-    @abstractmethod
-    def __exit__(self, *args: tuple) -> None:
+    @abc.abstractmethod
+    def __exit__(self, *args: t.Any) -> None:
         """
         Close connection with database.
         """
         pass
 
 
-class RedisConnector(BaseConnector):
+class LocalRedisConnector(BaseConnector):
     """
     Connector to redis. Set `db` value to choose redis layer.
 
@@ -137,12 +135,13 @@ class RedisConnector(BaseConnector):
         # If data must be encrypted
         self.safe = safe
 
-    def __enter__(self) -> RedisConnection:
+    def __enter__(self) -> LocalRedisConnection:
         """
         Open connection.
         """
         # Connecting to redis
-        connect: RedisConnector = RedisConnection(db=self.db, safe=self.safe)
+        connect: LocalRedisConnection = LocalRedisConnection(db=self.db,
+                                                             safe=self.safe)
 
         # Set attribute to close it then
         self.connect = connect

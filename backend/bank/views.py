@@ -1,13 +1,13 @@
+# Django
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.db.models.query import QuerySet
+from django.contrib.auth import get_user_model
+
 # DRF
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
-
-# Django
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth import get_user_model
-from django.db.models.query import QuerySet
 
 # Third-party
 from abstracts.mixins import AccessTokenMixin
@@ -18,7 +18,7 @@ from .serializers import (
     ShowTransactionsSerializer,
     DoTransactionSerializer,
     ConvertCurrencySerializer,
-    ReplenishmentSerializer,
+    BalanceSerializer,
 )
 from .models import (
     Card,
@@ -26,6 +26,7 @@ from .models import (
 )
 from .services.card_utils import CardGenerator
 from .services.transaction_utils import (
+    MockTransfer,
     create_transaction,
     do_currency_convertation,
 )
@@ -43,16 +44,12 @@ class ShowCardsView(APIView, AccessTokenMixin):
     permission_classes = (IsAuthenticated,)
     serializer_class: ShowCardsSerializer = ShowCardsSerializer
 
-    def post(self, request: Request) -> Response:
+    def get(self, request: Request) -> Response:
         """
-        POST method.
+        GET request.
         """
         # Get user by access token
-        user, error = self.get_user(request=request)
-
-        # If token is invalid
-        if error:
-            return Response(data=error, status=401)
+        user = self.get_user(request=request)
 
         # Find all user cards
         card_queryset: QuerySet[Card] = user.cards
@@ -73,9 +70,9 @@ class ShowTransactionsView(APIView, AccessTokenMixin):
     serializer_class: ShowTransactionsSerializer = ShowTransactionsSerializer
     pagination_class: BasePaginator = BasePaginator
 
-    def post(self, request: Request) -> Response:
+    def get(self, request: Request) -> Response:
         """
-        POST method.
+        GET request.
         """
         # filter variable to filer transactions queryset then
         filter: str = request.data.get('filter', '')
@@ -84,7 +81,7 @@ class ShowTransactionsView(APIView, AccessTokenMixin):
         paginator = self.pagination_class()
 
         # Get user by access token
-        user, _ = self.get_user(request=request)
+        user = self.get_user(request=request)
 
         # Queryset of all user transactions. Filter if it is valid
         queryset: QuerySet[Transaction] = \
@@ -111,14 +108,10 @@ class CreateCardView(APIView, AccessTokenMixin):
 
     def post(self, request: Request) -> Response:
         """
-        POST method.
+        POST request.
         """
         # Get user using JWT access token
-        user, error = self.get_user(request=request)
-
-        # If token is invalid
-        if error:
-            return Response(data=error, status=401)
+        user = self.get_user(request=request)
 
         # Chek is user can create new card
         if user.cards.count() >= Card.MAX_CARD_LIMIT:
@@ -150,17 +143,13 @@ class DoTransactionView(APIView, AccessTokenMixin):
 
     def post(self, request: Request) -> Response:
         """
-        POST method.
+        POST request.
         """
         # Serialization of data
         serializer = self.serializer_class(data=request.data)
 
         # Get user by access token
-        user, error = self.get_user(request=request)
-
-        # If token is invalid
-        if error:
-            return Response(data=error, status=401)
+        user = self.get_user(request=request)
 
         # Define .user attribute to use it then in validation
         serializer.user = user
@@ -188,14 +177,10 @@ class ConvertCurrencyView(APIView, AccessTokenMixin):
 
     def post(self, request: Request) -> Response:
         """
-        POST method.
+        POST request.
         """
         # Get user by access token
-        user, error = self.get_user(request=request)
-
-        # If token is invalid
-        if error:
-            return Response(data=error, status=401)
+        user = self.get_user(request=request)
 
         # Validate data
         serializer = self.serializer_class(data=request.data)
@@ -222,18 +207,14 @@ class BalanceReplenishmentView(APIView, AccessTokenMixin):
     """
 
     permission_classes: tuple = (IsAuthenticated,)
-    serializer_class: ReplenishmentSerializer = ReplenishmentSerializer
+    serializer_class: BalanceSerializer = BalanceSerializer
 
     def post(self, request: Request) -> Response:
         """
-        POST method.
+        POST request.
         """
         # Get user by access token
-        user, error = self.get_user(request=request)
-
-        # If token is invalid
-        if error:
-            return Response(data=error, status=401)
+        user = self.get_user(request=request)
 
         # Serializer data
         serializer = self.serializer_class(data=request.data)
@@ -244,8 +225,46 @@ class BalanceReplenishmentView(APIView, AccessTokenMixin):
         # Validate data
         serializer.is_valid(raise_exception=True)
 
-        # Create transaction
-        create_transaction(**serializer.validated_data)
+        # Create transfer and put money from real on virtual card
+        transfer: MockTransfer = MockTransfer()
+
+        transfer.from_real_to_virtual(**serializer.validated_data)
+
+        # Return response
+        response: dict = {
+            'data': 'Balance was replenished successfully.'
+        }
+        return Response(data=response, status=200)
+
+
+class BalanceWithdrawView(APIView, AccessTokenMixin):
+    """
+    View for user to withdraw balance.
+    """
+
+    permission_classes: tuple = (IsAuthenticated,)
+    serializer_class: BalanceSerializer = BalanceSerializer
+
+    def post(self, request: Request) -> Response:
+        """
+        POST request.
+        """
+        # Get user by access token
+        user = self.get_user(request=request)
+
+        # Serializer data
+        serializer = self.serializer_class(data=request.data)
+
+        # Set .user attribute to use it then in validation
+        serializer.user = user
+
+        # Validate data
+        serializer.is_valid(raise_exception=True)
+
+        # Create transfer and put money from real on virtual card
+        transfer: MockTransfer = MockTransfer()
+
+        transfer.from_virtual_to_real(**serializer.validated_data)
 
         # Return response
         response: dict = {

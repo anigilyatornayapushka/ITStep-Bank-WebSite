@@ -1,0 +1,27 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{% static 'icons/font/bootstrap-icons.css' %}">
+
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu'
+          rel='stylesheet' type='text/css'>
+    
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    {% block style %}{% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+    <script src="http://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+    <script src="{% static 'js/access_token.js' %}"></script>
+    {% block script %}{% endblock %}
+</body>
+</html>

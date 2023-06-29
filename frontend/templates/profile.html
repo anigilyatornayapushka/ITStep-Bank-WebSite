@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include "bank-navbar.html" %}
+    <div class="user-information">
+        <div class="user-container">
+            <div class="column" id="col-1">
+                <div id="avatar"></div>
+                <div>
+                    <p class="user-fullname"></p>
+                    <p class="user-email"></p>
+                </div>
+                <p class="user-gender">Gender: </p>
+                <p class="user-join">Join us since: </p>
+                <a href="/new-password/">Change password</a>
+                <a href="/transaction/">Do transaction</a>
+                <a href="/withdraw/">Withdraw money</a>
+            </div>
+            <div class="column" id="col-2">
+                <div class="new-card">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/check-auth.js' %}"></script>
+    <script src="{% static 'js/profile/profile.js' %}"></script>
+{% endblock %}

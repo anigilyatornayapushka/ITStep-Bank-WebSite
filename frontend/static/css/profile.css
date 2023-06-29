@@ -1,0 +1,263 @@
+body
+{
+    background: rgb(238, 238, 238);
+    overflow: hidden;
+}
+
+.user-information
+{
+    width: 100%;
+    height: 800px;
+    display: flex;
+    justify-content: center;
+}
+
+.user-container
+{
+    padding-top: 50px;
+    width: 1050px;
+    height: 800px;
+    display: flex;
+}
+
+.column
+{
+    margin-top: 30px;
+    width: 350px;
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-evenly;
+}
+
+#col-1
+{
+    height: 500px;
+}
+
+#col-1 div
+{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#col-2
+{
+    width: 700px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#col-2 .card
+{
+    margin: 25px 0px 0px 0px;
+}
+
+.column p
+{
+    color: black;
+}
+
+#avatar
+{
+    background-image: url('/media/profile/avatar.png');
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid blue;
+    background-size: cover;
+}
+
+#col-2 .card
+{
+    position: relative;
+    background: rgb(82, 156, 181);
+    border: 1px solid rgb(88, 127, 139);
+    border-radius: 10px;
+    width: 350px;
+    height: 200px;
+}
+
+#col-2 .card p
+{
+    margin: 10px 0px 10px 15px;
+    color: white;
+    font-size: 85%;
+}
+
+#col-2 .card .bigger-p
+{
+    font-size: 120%;
+}
+
+#col-2 .card hr
+{
+    border: none;
+    border-bottom: 1px solid white;
+}
+
+#col-2 .card .card-info
+{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+}
+
+#col-2 .card .card-info .card-span
+{
+    margin: 0px 5px 10px 5px;
+}
+
+.card-span
+{
+    background: rgb(121, 180, 198);
+    width: 48px;
+    letter-spacing: 3px;
+    font-size: 85%;
+}
+
+.card-cvv-span
+{
+    margin-top: 16px;
+    width: 90px;
+}
+
+.visa
+{
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+    height: 60px;
+    width: 50px;
+    border: 1px solid rgb(121, 180, 198);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.gray-square
+{
+    margin-top: 2px;
+    width: 43px;
+    height: 20px;
+    border: 1px solid lightgray;
+    border-radius: 2px;
+    background: lightgray;
+}
+
+.square
+{
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.square-line
+{
+    margin-top: 4px;
+    margin-left: -1px;
+    width: 43px;
+    height: 10px;
+    background: darkgray;
+}
+
+#sq2
+{
+    position: absolute;
+    right: 17px;
+    background: rgb(242, 119, 112);
+}
+
+#sq1
+{
+    position: absolute;
+    left: 17px;
+    background: rgb(248, 157, 112);
+}
+
+.sq
+{
+    margin-bottom: 2px;
+    width: 45px;
+    height: 25px;
+    position: relative;
+    display: flex;
+}
+
+.new-card
+{
+    width: 290px;
+    height: 245px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#new-card-btn
+{
+    border: 1px solid black;
+    border-radius: 7px;
+    margin-top: 15px;
+    height: 30px;
+    width: 290px;
+    background: rgb(40, 167, 79);
+}
+
+#new-card-btn:hover
+{
+    background: rgb(34, 151, 69);
+}
+
+#new-card-btn:active
+{
+    background: rgb(27, 133, 59);
+}
+
+.balance
+{
+    width: 280px;
+    font-size: 80%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.currency-box
+{
+    height: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.currency-box div
+{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 150%;
+    height: 15px;
+    width: 15px;
+}
+
+.currency-box div:hover
+{
+    cursor: pointer;
+    font-weight: bold;
+}
+
+a
+{
+    color: black;
+}
+
+a:hover
+{
+    text-decoration: none;
+}

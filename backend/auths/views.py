@@ -7,24 +7,25 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import generics
 
+# Python
+import typing as t
+
+# Third-party
+from abstracts.mixins import AccessTokenMixin
+
 # Local
 from .serializers import (
     RegistrateUserSerializer,
     LoginUserSerializer,
     ActivateAccountSerializer,
     ChangePasswordSerializer,
-    ForgetPasswordSerializer,
+    ForgotPasswordSerializer,
     ConfirmPasswordSerializer,
     RefreshTokenSerializer,
     LogoutSerializer,
     UserSerializer,
 )
-
-# Python
-import typing as t
-
-# Third-party
-from abstracts.mixins import AccessTokenMixin
+from .services.token_utils import check_refresh_token_validity
 
 
 class CommonPostView(generics.GenericAPIView):
@@ -53,7 +54,7 @@ class CommonPostView(generics.GenericAPIView):
 
     def post(self, request: Request) -> Response:
         """
-        POST method.
+        POST request.
         """
         # Data deserialization
         serializer = self.serializer_class(data=request.data)
@@ -124,13 +125,13 @@ class ChangePasswordView(CommonPostView):
     success_status: int = 200
 
 
-class ForgetPasswordView(CommonPostView):
+class ForgotPasswordView(CommonPostView):
     """
     Get reset password code for user.
     """
 
     permission_classes: tuple = (AllowAny,)
-    serializer_class: ForgetPasswordSerializer = ForgetPasswordSerializer
+    serializer_class: ForgotPasswordSerializer = ForgotPasswordSerializer
     success_status: int = 200
 
 
@@ -145,7 +146,7 @@ class NewPasswordConfirmView(CommonPostView):
 
 
 class LogoutView(CommonPostView):
-    """"
+    """
     Logout view.
     """
 
@@ -154,8 +155,8 @@ class LogoutView(CommonPostView):
     success_status: int = 200
 
 
-class UserView(CommonPostView, AccessTokenMixin):
-    """"
+class UserView(generics.GenericAPIView, AccessTokenMixin):
+    """
     User information view.
     """
 
@@ -163,22 +164,33 @@ class UserView(CommonPostView, AccessTokenMixin):
     serializer_class: UserSerializer = UserSerializer
     success_status: int = 200
 
-    def post(self, request: Request) -> Response:
-        user, _ = self.get_user(request=request)
+    def get(self, request: Request) -> Response:
+        """
+        GET request.
+        """
+        user = self.get_user(request=request)
         serializer = self.serializer_class(instance=user)
         return Response(data=serializer.data, status=self.success_status)
 
 
-class IsAuthView(CommonPostView, AccessTokenMixin):
-    """"
+class IsAuthView(generics.GenericAPIView, AccessTokenMixin):
+    """
     View to check if user authenticated.
     """
 
-    permission_classes: tuple = (IsAuthenticated,)
+    permission_classes: tuple = (AllowAny,)
     success_status: int = 200
 
-    def post(self, request: Request) -> Response:
-        data: dict = {
-            'data': 'ok'
-        }
-        return Response(data=data, status=self.success_status)
+    def get(self, request: Request) -> Response:
+        """
+        GET request.
+        """
+        # Get refresh_token from cookies
+        refresh_token: str = request.COOKIES.get('refresh_token')
+
+        # Check if refresh token is not valid
+        if check_refresh_token_validity(refresh_token=refresh_token) is False:
+            return Response(status=400)
+
+        return Response(status=self.success_status)
+

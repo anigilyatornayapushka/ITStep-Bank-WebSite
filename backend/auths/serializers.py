@@ -1,19 +1,30 @@
-# DRF
-from rest_framework import serializers
-
 # Django
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.utils import timezone
 from django.contrib.auth import (
     authenticate,
     login,
     get_user_model,
 )
-from django.utils import timezone
+
+# DRF
+from rest_framework import serializers
 
 # Simple JWT
 from rest_framework_simplejwt.tokens import RefreshToken
 
+# Python
+import datetime
+
+# Third-party
+from abstracts.mixins import AccessTokenMixin
+from abstracts.serializers import CheckFieldsValidSerializer
+
 # Local
+from .models import (
+    AccountCode,
+    TokenWhiteList,
+)
 from .utils import generate_code
 from .services.token_utils import add_token_to_db
 from .services.user_utils import get_user_ip
@@ -25,18 +36,9 @@ from .validators import (
     login_data_validation_error,
     user_code_validation,
     refresh_token_validation_error,
+    password_recovery_validation_error,
+    old_password_validation_error,
 )
-from .models import (
-    AccountCode,
-    TokenWhiteList,
-)
-
-# Third-party
-from abstracts.mixins import AccessTokenMixin
-from abstracts.serializers import CheckFieldsValidSerializer
-
-# Python
-import datetime
 
 
 User: AbstractBaseUser = get_user_model()
@@ -48,7 +50,7 @@ class RegistrateUserSerializer(CheckFieldsValidSerializer,
     User serializer for registration.
     """
 
-    email: str = serializers.CharField(max_length=60)
+    email: str = serializers.CharField(max_length=60, required=True)
 
     class Meta:
         model = User
@@ -133,8 +135,10 @@ class LoginUserSerializer(CheckFieldsValidSerializer):
     User serializer for log in.
     """
 
-    email: str = serializers.CharField(max_length=60)
-    password: str = serializers.CharField(max_length=128)
+    email: str = serializers.CharField(max_length=60, required=True)
+    password: str = serializers.CharField(max_length=128, required=True)
+    fingerprint: str = serializers.CharField(max_length=32, required=True)
+    remember_me: bool = serializers.BooleanField(required=True)
 
     def validate(self, attrs: dict) -> dict:
         """
@@ -142,14 +146,20 @@ class LoginUserSerializer(CheckFieldsValidSerializer):
         """
         email: str = attrs.get('email')
         password: str = attrs.get('password')
+        fingerprint: str = attrs.get('fingerprint')
         user: User | None = authenticate(email=email,
                                          password=password)
+
         # Check if user allowed to log in
         login_data_validation_error(email=email,  password=password, user=user,
                                     raise_exception=True)
 
         # Set attribute .user to use it then in .save()
         self.user = user
+
+        # Set attribute .fingerprint to use it then in .save()
+        self.fingerprint = fingerprint
+
         return attrs
 
     def save(self) -> None:
@@ -157,8 +167,11 @@ class LoginUserSerializer(CheckFieldsValidSerializer):
         Generate refresh and access token or login(user) if it is admin.
         """
         user: User = self.user
+
+        # Is user is admin
         if user.is_admin:
             login(request=self.request, user=user)
+
             # Set attribute .is_admin to use it then in .get_response()
             self.is_admin = True
         else:
@@ -170,11 +183,10 @@ class LoginUserSerializer(CheckFieldsValidSerializer):
 
         # Define some variables for refresh token
         ip: str = get_user_ip(request=self.request)
-        fingerprint: str = self.request.COOKIES.get('fingerprint', '')
 
         # Add refresh token in database
         add_token_to_db(user=user, token=str(refresh), ip=ip,
-                        fingerprint=fingerprint)
+                        fingerprint=self.fingerprint)
 
         # Set attribute .isrefresh to use it then in .get_response()
         self.refresh = refresh
@@ -205,8 +217,8 @@ class ActivateAccountSerializer(CheckFieldsValidSerializer):
     Serializer for account activation view.
     """
 
-    email: str = serializers.CharField(max_length=60)
-    code: str = serializers.CharField(max_length=50)
+    email: str = serializers.CharField(max_length=60, required=True)
+    code: str = serializers.CharField(max_length=50, required=True)
 
     def validate(self, attrs: dict) -> dict:
         """
@@ -256,24 +268,30 @@ class ChangePasswordSerializer(CheckFieldsValidSerializer, AccessTokenMixin):
     Serializer for user to reset password.
     """
 
-    password: str = serializers.CharField()
-    password2: str = serializers.CharField()
+    old_password: str = serializers.CharField(required=True)
+    password: str = serializers.CharField(required=True)
+    password2: str = serializers.CharField(required=True)
 
     def validate(self, attrs: dict) -> dict:
         """
         Validation of data.
         """
+        old_password: str = attrs.get('old_password')
         password: str = attrs.get('password')
         password2: str = attrs.get('password2')
 
         # get_user() from AccessTokenMixin and
         # self.request from CommonPostMixin
-        user, _ = self.get_user(request=self.request)
+        user = self.get_user(request=self.request)
 
         # Set .user attribute to use it then in .save()
         self.user = user
 
-        # Chcek if password is valid
+        # Check if old password is valid
+        old_password_validation_error(user=user, password=old_password,
+                                      raise_exception=True)
+
+        # Check if new password is valid
         password_validation_error(password1=password, password2=password2,
                                   user=user, raise_exception=True)
 
@@ -307,24 +325,35 @@ class ChangePasswordSerializer(CheckFieldsValidSerializer, AccessTokenMixin):
         return response
 
 
-class ForgetPasswordSerializer(CheckFieldsValidSerializer):
+class ForgotPasswordSerializer(CheckFieldsValidSerializer):
     """
     Serializer for user to get reset password code.
     """
 
-    email: str = serializers.CharField(max_length=60)
+    email: str = serializers.CharField(max_length=60, required=True)
+    last_name: str = serializers.CharField(min_length=1, required=True)
+    first_name: str = serializers.CharField(min_length=1, required=True)
+    gender: int = serializers.IntegerField(required=True)
 
     def validate(self, attrs: str) -> dict:
         """
         Validation of data.
         """
         email: str = attrs.get('email')
+        last_name: str = attrs.get('last_name')
+        first_name: str = attrs.get('first_name')
+        gender: int = attrs.get('gender')
 
         # Check if email is valid
         email_validation_error(email=email, find_user=True,
                                raise_exception=True)
+
         # Get user by email
         user: User = User.objects.get_object_or_none(email=email)
+
+        password_recovery_validation_error(gender=gender, last_name=last_name,
+                                           user=user, first_name=first_name,
+                                           raise_exception=True)
 
         # Set .user attribute to use it then in .save()
         self.user = user
@@ -336,6 +365,7 @@ class ForgetPasswordSerializer(CheckFieldsValidSerializer):
         Save data.
         """
         user: User = self.user
+
         # AccountCode.PASSWORD_RESET to make code more readable
         code_type: int = AccountCode.PASSWORD_RESET
 
@@ -361,10 +391,11 @@ class ConfirmPasswordSerializer(CheckFieldsValidSerializer):
     Confirm code to change user password.
     """
 
-    code: str = serializers.CharField(max_length=AccountCode.CODE_LENGTH)
-    email: str = serializers.CharField(max_length=60)
-    password: str = serializers.CharField(max_length=128)
-    password2: str = serializers.CharField(max_length=128)
+    code: str = serializers.CharField(max_length=AccountCode.CODE_LENGTH,
+                                      required=True)
+    email: str = serializers.CharField(max_length=60, required=True)
+    password: str = serializers.CharField(max_length=128, required=True)
+    password2: str = serializers.CharField(max_length=128, required=True)
 
     def validate(self, attrs: dict) -> dict:
         """
@@ -420,24 +451,30 @@ class ConfirmPasswordSerializer(CheckFieldsValidSerializer):
         return response
 
 
-class RefreshTokenSerializer(CheckFieldsValidSerializer):
+class RefreshTokenSerializer(CheckFieldsValidSerializer,
+                             AccessTokenMixin):
     """
     Serializer to refresh token.
     """
 
-    refresh: str = serializers.CharField(max_length=229, min_length=229)
+    fingerprint: str = serializers.CharField(max_length=32, required=True)
 
     def validate(self, attrs: dict) -> dict:
         """
         Data validation.
         """
-        token: str = attrs.get('refresh')
+        token: str = self.request.COOKIES.get('refresh_token', '')
+
+        fingerprint: str = attrs.get('fingerprint', '')
+
         ip: str = get_user_ip(request=self.request)
-        fingerprint: str = self.request.COOKIES.get('fingerprint', '')
 
         # Validate refresh token data
         refresh_token_validation_error(token=token, fingerprint=fingerprint,
                                        ip=ip, raise_exception=True)
+
+        # Set .token to use it then in .save()
+        self.token = token
 
         return attrs
 
@@ -445,8 +482,7 @@ class RefreshTokenSerializer(CheckFieldsValidSerializer):
         """
         Save data.
         """
-        refresh: str = self.validated_data.get('refresh')
-        token: RefreshToken = RefreshToken(token=refresh)
+        token: RefreshToken = RefreshToken(token=self.token)
         self.access_token = token.access_token
 
     def get_response(self) -> dict:
@@ -467,7 +503,7 @@ class LogoutSerializer(CheckFieldsValidSerializer, AccessTokenMixin):
         """
         # self.request from CommonPostMixin
         # self.get_user() from AccessTokenMixin
-        user, _ = self.get_user(request=self.request)
+        user = self.get_user(request=self.request)
 
         # Delete all user tokens
         TokenWhiteList.objects.filter(user=user).delete()
@@ -496,7 +532,8 @@ class UserSerializer(CheckFieldsValidSerializer, AccessTokenMixin):
     Serializer for user.
     """
 
-    first_name: str = serializers.CharField()
-    last_name: str = serializers.CharField()
-    email: str = serializers.CharField()
-    gender: str = serializers.CharField()
+    first_name: str = serializers.CharField(required=True)
+    last_name: str = serializers.CharField(required=True)
+    email: str = serializers.CharField(required=True)
+    gender: str = serializers.CharField(required=True)
+    datetime_created: str = serializers.CharField(required=True)

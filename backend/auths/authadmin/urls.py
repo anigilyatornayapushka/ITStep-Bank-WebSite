@@ -2,10 +2,7 @@
 from django.urls import path
 
 # Local
-from .views import (
-    # AdminUserLogout,
-    AdminUserLogin,
-)
+from .views import AdminUserLogin
 
 
 urlpatterns = [

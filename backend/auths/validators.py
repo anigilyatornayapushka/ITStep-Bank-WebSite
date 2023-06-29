@@ -1,3 +1,10 @@
+# Django
+from django.core.exceptions import ValidationError
+from django.db.models.query import QuerySet
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth import get_user_model
+from django.conf import settings
+
 # Python
 import re
 import typing as t
@@ -7,13 +14,7 @@ from .models import (
     AccountCode,
     TokenWhiteList,
 )
-
-# Django
-from django.core.exceptions import ValidationError
-from django.db.models.query import QuerySet
-from django.conf import settings
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth import get_user_model
+from .utils import Sha256Hasher
 
 
 User: AbstractBaseUser = get_user_model()
@@ -37,6 +38,7 @@ def email_validation_error(email: str, find_user: bool = False,
     Return dict of errors or None.
     """
     pattern: str = r'^[^\d\s]\w+@(\w+.\w+$)'
+
     # Create pattern: starts with letter, has at least
     # 2 characters in main part and domain in
     # settings ALLOWED_DOMAINS
@@ -48,10 +50,12 @@ def email_validation_error(email: str, find_user: bool = False,
         err: str = ('Email must starts with a letter and include'
                     ' at least two characters in main part.')
         error['email'].append(err)
+
     # If email's domain not allowed
     elif validation[0] not in allowed_domains:
         err: str = 'Domain %s is not allowed.' % validation[0]
         error['email'].append(err)
+
     # If find_user flag is on, check if there user with such email
     if find_user is True:
         user: User | None = User.objects.get_object_or_none(email=email)
@@ -90,14 +94,17 @@ def password_validation_error(password1: str,
         if user.check_password(password1):
             err: str = 'The password cannot match the old one.'
             error['password'].append(err)
+
     # If password length less than 7 (minimal length - 7)
     if len(password1) < 7:
         err: str = 'Password length must be greater or equal to 7.'
         error['password'].append(err)
+
     # If password contains only numbers or letters
     if password1.isalpha() or password1.isdigit():
         err: str = 'Password must contain both numbers and letters.'
         error['password'].append(err)
+
     # If password1 doesn't match password2
     if password2 and password1 != password2:
         err: str = 'Password mismatch.'
@@ -230,7 +237,7 @@ def user_code_validation(user: User, code: str, code_type: int,
 
     must be not expired and be owned by user.
 
-    Return doct of errors or None.
+    Return dict of errors or None.
     """
     error: dict = {}
 
@@ -238,6 +245,7 @@ def user_code_validation(user: User, code: str, code_type: int,
     activation_code: QuerySet[AccountCode] =\
         AccountCode.objects.extended_filter(user=user, expired=False,
                                             code=code, code_type=code_type)
+
     # Check if there such codes
     if activation_code.exists() is False:
         error.update({'code': ['This code is invalid.']})
@@ -266,16 +274,22 @@ def refresh_token_validation_error(token: str, ip: str, fingerprint: str,
                                    ) -> dict | None:
     """
     Validate refresh token.
+
+    Return dict of errors or None.
     """
     error: dict = {}
 
+    # Define hasher
+    hasher: Sha256Hasher = Sha256Hasher()
+
     # Check if refresh token is valid
-    is_valid: bool = \
+    token: str = hasher.hash(token)
+    token: TokenWhiteList =\
         TokenWhiteList.objects.find_valid(token=token, ip=ip,
-                                          fingerprint=fingerprint).exists()
+                                          fingerprint=fingerprint).last()
 
     # If not valid and function should raise exception
-    if not is_valid and raise_exception is True:
+    if not token and raise_exception is True:
         error: dict = {
             'refresh': ['Refresh token is not valid.']
         }
@@ -288,6 +302,8 @@ def gender_validation_error(gender: str, raise_exception: bool = False
                             ) -> dict | None:
     """
     Check if user gender is valid.
+
+    Return dict of errors or None.
     """
     error: dict = {}
 
@@ -298,6 +314,54 @@ def gender_validation_error(gender: str, raise_exception: bool = False
     # Check if gender is not valid
     elif gender not in (1, 2):
         error['gender'] = ['Gender is not allowed.']
+
+    # If not valid and function should raise exception
+    if error and raise_exception is True:
+        raise ValidationError(error)
+
+    return error if error else None
+
+
+def password_recovery_validation_error(user: User, first_name: str,
+                                       last_name: str, gender: int,
+                                       raise_exception: bool = False
+                                       ) -> dict | None:
+    """
+    Check if all user data to recover data is valid.
+
+    Return dict of errors or None.
+    """
+    error: dict = {}
+
+    # Check if fullname is not valid
+    if user.fullname != '%s %s' % (last_name, first_name):
+        err: str = ['User was not found.']
+        error.update({'last_name': err, 'first_name': err})
+
+    # Check if gender is not valid
+    if user.gender != gender:
+        err: str = ['User was not found.']
+        error.update({'gender': err})
+
+    # If not valid and function should raise exception
+    if error and raise_exception is True:
+        raise ValidationError(error)
+
+    return error if error else None
+
+
+def old_password_validation_error(user: User, password: str,
+                                  raise_exception: bool = False) -> dict | None:
+    """
+    Check if old password is valid for user.
+
+    Return dict of errors or None.
+    """
+    error: dict = {}
+
+    # Check if old password is not valid
+    if not user.check_password(password):
+        error = {'old_password': ['Old password is invalid.']}
 
     # If not valid and function should raise exception
     if error and raise_exception is True:

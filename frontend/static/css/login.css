@@ -1,0 +1,223 @@
+body
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgb(53, 58, 92);
+}
+
+.login
+{
+    width: 100%;
+    height: 550px;
+    display: flex;
+    justify-content: center;
+}
+
+.login-container
+{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 1100px;
+    max-width: 1100px;
+    height: 100%;
+    padding-top: 80px;
+}
+
+.right-side
+{
+    border-radius: 0px 5px 5px 0px;
+    background: rgb(84, 135, 240);
+    width: 25px;
+    height: 380px;
+}
+
+.left-side
+{
+    border-radius: 5px 0px 0px 5px;
+    background: white;
+    width: 500px;
+    height: 380px;
+}
+
+#divOne
+{
+    width: 500px;
+    height: 70px;
+    padding-left: 50px;
+    padding-top: 40px;
+}
+
+#divOne p
+{
+    margin: none;
+    color: rgb(84, 135, 240);
+    font-size: x-large;
+    font-weight: 1000;
+}
+
+#divTwo
+{
+    width: 500px;
+    height: 170px;
+    padding-left: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+
+#divTwo div
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 400px;
+    height: 85px;
+}
+
+#divTwo div div
+{
+    padding-left: 4px;
+    padding-bottom: 2px;
+    color: rgb(78, 78, 78);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+#divTwo div i
+{
+    bottom: 9px;
+    right: 9px;
+    position: absolute;
+    color: rgb(19, 44, 94);
+}
+
+#divTwo div input
+{
+    background: rgb(229, 229, 229);
+    height: 80px;
+    width: 400px;
+    border-radius: 3px;
+    padding: 0px 35px 0px 10px;
+    border: none;
+    outline: none;
+    color: black;
+}
+
+input:-webkit-autofill {
+    transition: all 5000s ease-in-out;
+}
+
+#divThree
+{
+    padding: 10px 50px 0px 50px;
+    width: 500px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+label
+{
+    color: rgb(78, 78, 78);
+}
+
+#divFour
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+    height: 90px;
+    padding-top: 50px;
+}
+
+#fingerprint-display
+{
+    border-radius: 50%;
+    position: absolute;
+    cursor: pointer;
+    margin-top: -50px;
+    width: 48px;
+    height: 47px;
+}
+
+#gradient-print
+{
+    width: 48px;
+    height: 0px;
+    margin-top: -50px;
+    position: absolute;
+    overflow: hidden;
+    background: white;
+}
+
+#black-print
+{
+    border-radius: 50%;
+    width: 48px;
+    height: 47px;
+    margin-top: -50px;
+    position: absolute;
+    overflow: hidden;
+}
+
+#divFour p
+{
+    color: black;
+    font-size: small;
+}
+
+.login-result
+{
+    z-index: 1;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: rgb(125, 211, 123);
+    margin-top: -50px;
+    border-radius: 50%;
+    width: 48px;
+    height: 47px;
+}
+
+.login-result
+{
+    z-index: 1;
+}
+
+.login-result .bi
+{
+    position: absolute;
+    color: white;
+    font-size: xx-large;
+}
+
+.login-result-wall
+{
+    width: 50px;
+    height: 50px;
+    transition: 1s;
+    z-index: 2;
+    background: rgb(125, 211, 123);;
+}
+
+.login-result-p
+{
+    position: absolute;
+    top: 100px;
+    left: 0;
+}
+
+.bad
+{
+    background: rgb(220, 53, 69);
+    color: rgb(220, 53, 69);
+}

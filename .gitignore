@@ -10,5 +10,5 @@ celerybeat-schedule.dir
 # Db
 testdb
 
-# Pycache
+# Python import cache
 __pycache__/

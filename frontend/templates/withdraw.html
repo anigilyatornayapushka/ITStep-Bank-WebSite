@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Withdraw{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/withdraw.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include "bank-navbar.html" %}
+
+    <div class="balance">
+        <div class="balance-container">
+            <form>
+                <div class="form-container" id="divOne">
+                    <p>Balance withdraw</p>
+                </div>
+                <div class="form-container" id="divTwo">
+                    <p>
+                        Withdraw your balance from a virtual card to
+                        real to use it.
+                    </p>
+                </div>
+                <div class="form-container" id="divThree">
+                    <img src="/media/balance/to-card.png">
+                    <img src="/media/balance/arrow-to-right.png">
+                    <img src="/media/balance/from-money.png">
+                    <img src="/media/balance/arrow-to-right.png">
+                    <img src="/media/balance/to-card.png">
+                </div>
+                <div class="form-container" id="divFour">
+                    <input type="text" placeholder="Virtual card number" id="card_receiver" pattern="4400\s?\d{4}\s?\d{4}\s?\d{4}" required>
+                    <img src="/media/balance/arrow-to-right.png">
+                    <input type="text" placeholder="Real card number" id="card_sender" pattern="\d{16}" maxlength="16" required>
+                </div>
+                <div class="form-container" id="divFive">
+                    <div id="innerDivOne">
+                        <p class="hints">
+                            * Required
+                        </p>
+                        <p class="hints">
+                            Number of your
+                        </p>
+                        <p class="hints">
+                            virtual card
+                        </p>
+                    </div>
+                    <div id="innerDivTwo">
+                        <p class="hints">
+                            * Required
+                        </p>
+                        <p class="hints">
+                            Number of your
+                        </p>
+                        <p class="hints">
+                            real card
+                        </p>
+                    </div>
+                </div>
+                <div class="form-container" id="divSix">
+                    <p class="amount-input"><input type="text" id="amount" value="100" pattern="[1-9]\d{0,5}(.\d{1,2})?" placeholder="Amount" required></p>
+                    <p>
+                        Currency:
+                        <select name="currency" id="currency">
+                            <option value="KZT" selected>KZT</option>
+                            <option value="RUB">RUB</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                        </select>
+                    </p>
+                </div>
+                <div class="form-container" id="divSeven">
+                    <p class="hints">
+                        Use "." to split integer part and decimal
+                    </p>
+                </div>
+                <div class="form-container" id="divEight">
+                    <input type="range" value="0" min="0" max="100">
+                    <p>
+                        <span id="percentageEnd">0</span><span>% Done</span>
+                    </p>
+                </div>
+                <div class="form-container" id="divNine">
+                    <span class="hints" id="result">Scroll to the end to finish operation</span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="captcha">
+        <div class="captcha-container">
+            <p>
+                <label for="captcha-checkbox">
+                    <input type="checkbox" id="captcha-checkbox">
+                    I am not robot
+                </label>
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/check-auth.js' %}"></script>
+    <script src="{% static 'js/withdraw/withdraw.js' %}"></script>
+{% endblock %}
