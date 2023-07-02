@@ -105,10 +105,19 @@ class NewPasswordView(DefaultFrontendView):
 
 class TransactionView(DefaultFrontendView):
     """
-    Do transaction and check all transactions done.
+    Do transaction.
     """
 
     template: str = 'transaction.html'
+
+
+
+class TransactionAllView(DefaultFrontendView):
+    """
+    Check all transactions done.
+    """
+
+    template: str = 'transaction-all.html'
 
 
 class WithdrawMoneyView(DefaultFrontendView):

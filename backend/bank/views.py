@@ -31,6 +31,7 @@ from .services.transaction_utils import (
     do_currency_convertation,
 )
 from .paginataion import BasePaginator
+from .caches import LocalRedisConnector
 
 
 User: AbstractBaseUser = get_user_model()
@@ -61,6 +62,50 @@ class ShowCardsView(APIView, AccessTokenMixin):
         return Response(data=serializer.data, status=200)
 
 
+class CardOwnerView(APIView):
+    """
+    Get fullname of card owner.
+    """
+
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request: Request) -> Response:
+        """
+        GET request.
+        """
+        # Get card number from request
+        number: str = request.query_params.get('number', '')
+
+        # Connect with redis server
+        with LocalRedisConnector(db=0) as connection:
+
+            # If already in cache
+            if info := connection.get(key=number):
+
+                return Response(data=info)
+
+            # Find card with such number
+            card_filter: QuerySet[Card] = Card.objects.filter(number=number)
+
+            # If card was found
+            if card_filter.exists():
+
+                # Get card owner
+                user_info: User = card_filter.last().user
+
+                # Get card owner fullname
+                fullname: str = user_info.fullname
+
+                response: dict = {'fullname': fullname}
+
+                # Set it in cache
+                connection.set(key=number, value=response)
+
+                return Response(data=response)
+
+            return Response(status=400)
+
+
 class ShowTransactionsView(APIView, AccessTokenMixin):
     """
     Show all user transactions.
@@ -75,7 +120,7 @@ class ShowTransactionsView(APIView, AccessTokenMixin):
         GET request.
         """
         # filter variable to filer transactions queryset then
-        filter: str = request.data.get('filter', '')
+        filter: str = request.query_params.get('filter', '')
 
         # Pagination class instance
         paginator = self.pagination_class()

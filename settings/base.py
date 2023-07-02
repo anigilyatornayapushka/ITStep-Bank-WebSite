@@ -45,6 +45,7 @@ CUSTOM_APPS = (
     'abstracts',
     'auths',
     'bank',
+    'email_tools',
 
     'frontend',
 )

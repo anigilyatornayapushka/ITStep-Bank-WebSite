@@ -5,11 +5,35 @@
 {% block title %}Currency convertation{% endblock %}
 
 {% block style %}
+    <link rel="stylesheet" href="{% static 'css/currency-convertation.css' %}">
 {% endblock %}
 
 {% block content %}
     {% include "bank-navbar.html" %}
+    <div class="convertation">
+        <form class="container">
+            <h2>Currency convertation</h2>
+            <select name="number"></select>
+            <input type="number" name="balance" min="1" placeholder="Amount">
+            <select name="currency1">
+                <option selected>KZT</option>
+                <option>RUB</option>
+                <option>USD</option>
+                <option>EUR</option>
+            </select>
+            =>
+            <select name="currency2">
+                <option selected>KZT</option>
+                <option>RUB</option>
+                <option>USD</option>
+                <option>EUR</option>
+            </select>
+            <button>Convert</button>
+        </form>
+    </div>
 {% endblock %}
 
 {% block script %}
+    <script src="{% static 'js/check-auth.js' %}"></script>
+    <script src="{% static 'js/currency-convertation/currency-convertation.js' %}"></script>
 {% endblock %}

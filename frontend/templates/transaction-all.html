@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}All transactions{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/transaction-all.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include "bank-navbar.html" %}
+    <div class="all-transactions-container"></div>
+    <div class="actions">
+        <div class="action-p">Previous</div>
+        <div class="action-p">All</div>
+        <div class="action-p">Currency convertation</div>
+        <div class="action-p">Received</div>
+        <div class="action-p">Spent</div>
+        <div class="action-p">Next</div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/check-auth.js' %}"></script>
+    <script src="{% static 'js/transaction/transaction-all.js' %}"></script>
+{% endblock %}

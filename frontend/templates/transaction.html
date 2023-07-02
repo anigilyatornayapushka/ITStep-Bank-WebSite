@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}Transactions{% endblock %}
+{% block title %}Do Transaction{% endblock %}
 
 {% block style %}
     <link rel="stylesheet" href="{% static 'css/transaction.css' %}">
@@ -10,9 +10,29 @@
 
 {% block content %}
     {% include "bank-navbar.html" %}
+
+    <form class="transaction">
+        <input type="text" name="number1" id="card_sender" placeholder="Your card number">
+        <p id="card_sender_validator">
+            <span>You have not such card number</span>
+        </p>
+        <input type="text" name="number2" id="card_receiver" placeholder="Receiver card number">
+        <p id="card_receiver_validator">
+            <span>??? ???</span>
+        </p>
+        <input type="number" name="balance" placeholder="Amount">
+        <select name="currency">
+            <option selected>KZT</option>
+            <option>RUB</option>
+            <option>EUR</option>
+            <option>USD</option>
+        </select>
+        <button>Send</button>
+        <a href="/transaction/all/">Show all transactions</a>
+    </form>
 {% endblock %}
 
 {% block script %}
     <script src="{% static 'js/check-auth.js' %}"></script>
-    <script src="{% static 'js/withdraw/transaction.js' %}"></script>
+    <script src="{% static 'js/transaction/transaction.js' %}"></script>
 {% endblock %}

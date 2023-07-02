@@ -1,0 +1,78 @@
+body
+{
+    width: 100vw;
+    height: 100vh;
+    background: rgb(197, 212, 247);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.transaction
+{
+    width: 430px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.transaction p span
+{
+    color: black;
+    font-size: 80%;
+}
+
+.transaction p
+{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.transaction input
+{
+    width: 85%;
+    height: 5%;
+    padding-left: 5px;
+    outline: none;
+    color: black;
+}
+
+select, option
+{
+    color: black;
+    outline: none;
+}
+
+button
+{
+    background: none;
+    outline: none;
+    border: 1px solid black;
+    background: white;
+    color: black;
+    width: 30%;
+    height: 5%;
+}
+
+button:hover
+{
+    background: rgb(211, 211, 211);
+}
+
+button:active
+{
+    background: rgb(167, 167, 167);
+}
+
+a
+{
+    color: black;
+}
+
+a:hover
+{
+    text-decoration: none;
+}

@@ -152,16 +152,6 @@ class ConvertCurrencySerializer(CheckFieldsValidSerializer):
         balance_validation_error(balance=balance, number=number,
                                  currency=currency1, raise_exception=True)
 
-        # If currencies are the same
-        if currency1 == currency2:
-
-            # Raise exception
-            err: dict = {
-                'currency1': ['You can\'t change currency to itself.'],
-                'currency2': ['You can\'t change currency to itself.']
-            }
-            raise serializers.ValidationError(err)
-
         return attrs
 
 

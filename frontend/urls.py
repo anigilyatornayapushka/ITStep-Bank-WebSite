@@ -14,6 +14,7 @@ from .views import (
     ReplenishBalanceView,
     NewPasswordView,
     TransactionView,
+    TransactionAllView,
     WithdrawMoneyView,
     CurrencyConvertationView,
 )
@@ -53,9 +54,12 @@ urlpatterns = [
     # Do transaction.
     path('transaction/', TransactionView.as_view()),
 
+    # Check all transactions.
+    path('transaction/all/', TransactionAllView.as_view()),
+
     # Withdraw money
     path('withdraw/', WithdrawMoneyView.as_view()),
 
     # Convert currency
-    path('/currency-convertation/', CurrencyConvertationView.as_view())
+    path('currency-convertation/', CurrencyConvertationView.as_view())
 ]
