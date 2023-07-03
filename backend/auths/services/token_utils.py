@@ -25,7 +25,7 @@ def check_refresh_token_validity(refresh_token: str) -> bool:
 
     exists: bool = TokenWhiteList.objects.filter(
         refresh_token=hashed_refresh_token).exists()
-    
+
     return exists
 
 

@@ -193,4 +193,3 @@ class IsAuthView(generics.GenericAPIView, AccessTokenMixin):
             return Response(status=400)
 
         return Response(status=self.success_status)
-

@@ -47,8 +47,8 @@ class RabbitMQConnection:
         """
         # Define parameters of connection
         params: pika.ConnectionParameters =\
-              pika.ConnectionParameters(host='127.0.0.1', port=5672,
-                                        credentials=self.credentials)
+            pika.ConnectionParameters(host='127.0.0.1', port=5672,
+                                      credentials=self.credentials)
 
         # Create connection
         connection: pika.BlockingConnection =\

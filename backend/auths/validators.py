@@ -351,7 +351,8 @@ def password_recovery_validation_error(user: User, first_name: str,
 
 
 def old_password_validation_error(user: User, password: str,
-                                  raise_exception: bool = False) -> dict | None:
+                                  raise_exception: bool = False
+                                  ) -> dict | None:
     """
     Check if old password is valid for user.
 

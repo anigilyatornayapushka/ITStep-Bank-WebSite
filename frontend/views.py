@@ -111,7 +111,6 @@ class TransactionView(DefaultFrontendView):
     template: str = 'transaction.html'
 
 
-
 class TransactionAllView(DefaultFrontendView):
     """
     Check all transactions done.

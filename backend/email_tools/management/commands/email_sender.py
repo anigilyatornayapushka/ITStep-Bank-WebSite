@@ -9,8 +9,8 @@ import typing as t
 import decouple
 import json
 
-# Third-party
-from auths.utils import TextEmailSender
+# Local
+from ...utils import TextEmailSender
 
 
 class Command(BaseCommand):
@@ -54,9 +54,8 @@ class Command(BaseCommand):
 
         # Define parameters of connection
         params: pika.ConnectionParameters =\
-              pika.ConnectionParameters(host='127.0.0.1',
-                                        port=5672,
-                                        credentials=credentials)
+            pika.ConnectionParameters(host='127.0.0.1', port=5672,
+                                      credentials=credentials)
 
         # Create connection
         connection: pika.BlockingConnection =\
@@ -71,8 +70,8 @@ class Command(BaseCommand):
 
         # Create consumer
         channel.basic_consume(queue=queue_name,
-                            on_message_callback=self._callback,
-                            auto_ack=True)
+                              on_message_callback=self._callback,
+                              auto_ack=True)
 
         # Enter the infinite loop to process messages
         while True:
