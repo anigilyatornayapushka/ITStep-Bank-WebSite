@@ -1,0 +1,23 @@
+------- Ссылки на необходимые инструменты ------+
+                                                |
+https://www.erlang.org/downloads                | Установка Erlang для RabbitMQ
+https://www.rabbitmq.com/install-windows.html   | Установка RabbitMQ
+https://github.com/tporadowski/redis/releases   | Установка Redis на Windows (Тут надо зип файл скачать)
+https://www.postgresql.org/download/            | Установка PostgreSQL
+                                                |
+----- Необохдимые шаги для запуска проекта -----+
+                                                |
+1. Настроить .env файл                          | Создание переменных окружения
+2. В PostgreSQL создать БД bank_db              | Создать базу данных
+3. py -m venv env                               | Создать виртуальное окружение
+4. call .\env\Scripts\activate                  | Активировать его
+5. pip install -r tools\requirements\req.txt    | Установить необходимые модули
+6. Включить Redis                               | Включение redis сервера
+7. Включить RabbitMQ                            | Настройка RabbitMQ
+    7.1 Создать queue email_to_send             | Создать очередь
+    7.2 Создать exhange email_to_send_exchange  | Создать обменник
+    7.3 Забиндить их                            | Создать бинд между ними
+8. py manage.py email_sender                    | Запустить сервис отправки писем
+9. py manage.py runserver                       | Запустить основной сервер
+                                                |
+------------------------------------------------+
