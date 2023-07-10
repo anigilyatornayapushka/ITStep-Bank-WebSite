@@ -72,11 +72,11 @@ function loadTransactions(action) {
         for (transaction of resp.data.results) {
           let sender = transaction.sender
           if (sender == null) {
-            sender = "Real number"
+            sender = ""
           }
           let receiver = transaction.receiver
           if (receiver == null) {
-            receiver = "Real number"
+            receiver = ""
           }
           allTransactionsBox.innerHTML += `
             <p class="transaction">
